@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -80,7 +81,7 @@ fun GastosViagem(onBack: () -> Boolean) {
                             .onGloballyPositioned { coordinates ->
                                 textFieldSize = coordinates.size.toSize()
                             },
-                        label = { Text("Label")},
+                        label = { Text("Categoria")},
                         trailingIcon = {
                             Icon(icon,"contentDescription",
                                 Modifier.clickable { expanded = !expanded })
