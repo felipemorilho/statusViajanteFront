@@ -1,4 +1,4 @@
-package br.com.empiricus.statusviajante.android.gastoviagem
+package br.com.empiricus.statusviajante.android.gastoViagem
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
