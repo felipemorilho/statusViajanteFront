@@ -15,12 +15,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.components.outLinedButtonComponent
-import br.com.empiricus.statusviajante.android.components.outLinedTextFildComponent
-import br.com.empiricus.statusviajante.android.components.topBarComponent
+import br.com.empiricus.statusviajante.android.Route
+import br.com.empiricus.statusviajante.android.components.*
 
 @Composable
-fun cadastroViagens(){
+fun cadastroViagens(onNavTest: () -> Unit) {
     MyApplicationTheme {
         Scaffold(
             topBar = { topBarComponent() }
@@ -93,14 +92,14 @@ fun cadastroViagens(){
                             modifier = Modifier.fillMaxWidth(0.5f),
                             horizontalAlignment = Alignment.Start
                         ) {
-                            outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                            outLinedTextFildDate(
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = dataInicio,
                                 title = "Data inicio"
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = orcamentoTotal,
                                 title = "Orçamento total"
                             )
@@ -110,14 +109,14 @@ fun cadastroViagens(){
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.End
                         ) {
-                            outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                            outLinedTextFildDate(
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = dataFinal,
                                 title = "Data final"
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = orcamentoDiario,
                                 title = "Orçamento diario"
                             )
@@ -136,7 +135,7 @@ fun cadastroViagens(){
 
                 item {
                     Spacer(modifier = Modifier.height(25.dp))
-                    outLinedButtonComponent(onNavigationIconClick = {}, title = "Cadastrar viagem")
+                    outLinedButtonComponent(onNavigationIconClick = {onNavTest.invoke()}, title = "Cadastrar viagem")
                 }
             }
         }
@@ -147,5 +146,5 @@ fun cadastroViagens(){
 @Preview
 @Composable
 fun previewCadastroV(){
-    cadastroViagens()
+    cadastroViagens(onNavTest = {})
 }
