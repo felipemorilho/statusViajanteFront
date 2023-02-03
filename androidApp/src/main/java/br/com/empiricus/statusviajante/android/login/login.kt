@@ -22,12 +22,18 @@ import br.com.empiricus.statusviajante.android.components.topBarComponent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
-
+import br.com.empiricus.statusviajante.android.components.bottonBarComponent
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun Login(onBack: () -> Boolean) {
+
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
 
     fun entrar()  {
         println("user quer entrar")
@@ -39,7 +45,12 @@ fun Login(onBack: () -> Boolean) {
 
     MyApplicationTheme {
         Scaffold(
-            topBar = { topBarComponent(onClickNav = {onBack.invoke()}) }
+            topBar = { topBarComponent(onClickNav = {onBack.invoke()}) },
+            bottomBar = { bottonBarComponent(
+                onBack = {},
+                onNavDrawer = {
+                    scope.launch { scaffoldState.drawerState.open() }
+                }) }
         ) {
             LazyColumn(
                 modifier = Modifier
