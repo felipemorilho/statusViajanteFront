@@ -2,11 +2,11 @@ package br.com.empiricus.statusviajante.android.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -45,7 +44,7 @@ fun outLinedTextFildComponent(
                 )
             )
         },
-        shape = RoundedCornerShape(18.dp),
+        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,
@@ -93,7 +92,7 @@ fun outLinedTextFildPassword (
                 )
             }
         },
-        shape = RoundedCornerShape(18.dp),
+        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,
@@ -106,10 +105,13 @@ fun outLinedTextFildPassword (
 }
 
 @Composable
-fun outLinedTextFildDate(
+fun outLinedTextFildIcon(
     valor : MutableState<TextFieldValue>,
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    icon: ImageVector,
+    description: String,
+    onClick: () -> Unit
 ){
     OutlinedTextField(
         modifier = modifier
@@ -118,11 +120,13 @@ fun outLinedTextFildDate(
         value = valor.value,
         onValueChange = { valor.value = it },
         trailingIcon = {
-            IconButton(onClick = {}){
+            IconButton(
+                onClick = {onClick}
+            ){
                 Icon(
-                    imageVector = Icons.Filled.CalendarMonth,
-                    contentDescription = "Calendario do mes",
-                    tint = MaterialTheme.colors.secondary
+                    imageVector = icon,
+                    contentDescription = description,
+                    tint = MaterialTheme.colors.primary
                 )
             }
         },
@@ -135,7 +139,7 @@ fun outLinedTextFildDate(
                 )
             )
         },
-        shape = RoundedCornerShape(18.dp),
+        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,

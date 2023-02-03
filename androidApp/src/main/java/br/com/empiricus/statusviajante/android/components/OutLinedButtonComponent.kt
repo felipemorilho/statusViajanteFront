@@ -1,7 +1,9 @@
 package br.com.empiricus.statusviajante.android.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -13,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,10 +33,10 @@ fun outLinedButtonComponent(
     modifier: Modifier = Modifier
 ) {
     OutlinedButton(onClick = onNavigationIconClick,
-        shape = RoundedCornerShape(18.dp),
+        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
         modifier = modifier.fillMaxWidth(0.8f)
-            .height(62.dp)
+            .height(60.dp)
     )   {
         Text(
             text = title,
@@ -45,3 +48,31 @@ fun outLinedButtonComponent(
         )
     }
 }
+
+@Composable
+fun outLinedButtonTransparent(
+    onNavigationIconClick: ()-> Unit,
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    OutlinedButton(onClick = onNavigationIconClick,
+        border = BorderStroke(1.dp, color = MaterialTheme.colors.primary),
+        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Transparent,
+            contentColor = MaterialTheme.colors.primary
+        ),
+        modifier = modifier.fillMaxWidth(0.8f)
+            .height(60.dp)
+    )   {
+        Text(
+            text = title,
+            textAlign = TextAlign.Center,
+            style = TextStyle(
+                color = MaterialTheme.colors.primary,
+                fontSize = 18.sp
+            )
+        )
+    }
+}
+

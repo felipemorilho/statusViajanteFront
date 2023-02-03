@@ -24,7 +24,6 @@ import br.com.empiricus.statusviajante.android.components.topBarComponent
 fun testeBonitin(onBack: () -> Boolean) {
     MyApplicationTheme {
         Scaffold(
-            topBar = { topBarComponent(onClickNav = {onBack.invoke()}) }
         ) {
             LazyColumn(
                 modifier = Modifier
