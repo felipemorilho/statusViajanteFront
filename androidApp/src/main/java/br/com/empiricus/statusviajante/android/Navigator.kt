@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.empiricus.statusviajante.android.cadastroviagens.cadastroViagens
 import br.com.empiricus.statusviajante.android.gastoViagem.GastosViagem
-import br.com.empiricus.statusviajante.android.testescreen.testeBonitin
 
 enum class  Route {
     Login,
@@ -27,8 +26,8 @@ fun navigator(
         startDestination = initial.name
     ) {
         composable(Route.CadastroViagens.name) {
-            cadastroViagens {
-                navHostController.navigate(Route.Test.name)
+            cadastroViagens{
+                navHostController.popBackStack()
             }
         }
         composable(Route.Test.name){

@@ -1,6 +1,7 @@
 package br.com.empiricus.statusviajante.android
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
@@ -43,8 +44,8 @@ fun MyApplicationTheme(
         )
     )
     val shapes = Shapes(
-        small = RoundedCornerShape(4.dp),
-        medium = RoundedCornerShape(4.dp),
+        small = RoundedCornerShape(18.dp),
+        medium = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
         large = RoundedCornerShape(0.dp)
     )
 

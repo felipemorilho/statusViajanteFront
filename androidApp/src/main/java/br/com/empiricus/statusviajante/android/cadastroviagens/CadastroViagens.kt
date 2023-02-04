@@ -22,7 +22,7 @@ import br.com.empiricus.statusviajante.android.components.*
 import kotlinx.coroutines.launch
 
 @Composable
-fun cadastroViagens(onNavTest: () -> Unit) {
+fun cadastroViagens(onBack: () -> Boolean) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -32,7 +32,7 @@ fun cadastroViagens(onNavTest: () -> Unit) {
             scaffoldState = scaffoldState,
             topBar = {topBarComponent()},
             bottomBar = { bottonBarComponent(
-                onBack = {},
+                onBack = {onBack.invoke()},
                 onNavDrawer = {
                     scope.launch { scaffoldState.drawerState.open() }
             }) },
@@ -101,14 +101,11 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                 }
 
                 item {
-                    val moedaCorrente = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildIcon(
-                        valor = moedaCorrente,
-                        title = "Moeda corrente",
-                        icon = Icons.Filled.ArrowDropDown,
-                        description = "seta para baixo",
-                        onClick = {}
+                    val moedaCorrente = listOf(
+                        "Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen"
                     )
+
+                    boxSelector(categorias = moedaCorrente, title = "Moeda Corrente")
                 }
 
                 item {
@@ -172,7 +169,7 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                 }
 
                 item {
-                    outLinedButtonComponent(onNavigationIconClick = {onNavTest.invoke()}, title = "Cadastrar viagem")
+                    outLinedButtonComponent(onNavigationIconClick = {}, title = "Cadastrar viagem")
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             }
@@ -184,5 +181,5 @@ fun cadastroViagens(onNavTest: () -> Unit) {
 @Preview
 @Composable
 fun previewCadastroV(){
-    cadastroViagens(onNavTest = {})
+    cadastroViagens(onBack = {true})
 }

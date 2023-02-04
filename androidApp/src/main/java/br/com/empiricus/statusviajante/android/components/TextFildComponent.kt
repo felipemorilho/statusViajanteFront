@@ -44,7 +44,7 @@ fun outLinedTextFildComponent(
                 )
             )
         },
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,
@@ -92,7 +92,7 @@ fun outLinedTextFildPassword (
                 )
             }
         },
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,
@@ -139,7 +139,7 @@ fun outLinedTextFildIcon(
                 )
             )
         },
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,

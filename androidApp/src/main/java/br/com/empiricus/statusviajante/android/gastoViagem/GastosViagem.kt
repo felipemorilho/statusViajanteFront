@@ -26,15 +26,34 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.isPopupLayout
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.components.outLinedButtonComponent
-import br.com.empiricus.statusviajante.android.components.outLinedTextFildComponent
-import br.com.empiricus.statusviajante.android.components.topBarComponent
+import br.com.empiricus.statusviajante.android.components.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun GastosViagem(onBack: () -> Boolean) {
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
     MyApplicationTheme {
         Scaffold(
-            topBar = { topBarComponent(onClickNav = {onBack.invoke()}) }
+            topBar = { topBarComponent() },
+            bottomBar = { bottonBarComponent(
+                onBack = {onBack.invoke()},
+                onNavDrawer = {
+                    scope.launch { scaffoldState.drawerState.open() }
+                }) },
+            drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+            drawerContent = {
+                drawerHeader()
+                drawerBody(
+                    itens = listaItensDrawer(),
+                    onItemClick = {
+                        when(it.id) {
+
+                        }
+                    }
+                )
+            }
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -65,55 +84,12 @@ fun GastosViagem(onBack: () -> Boolean) {
                 }
 
                 item {
-
-                    var expanded by remember { mutableStateOf(false) }
                     val categorias =
                         listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
-                    var selecionado by remember { mutableStateOf("") }
 
-                    var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-                    val icon =
-                        if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-
-                    Box {
-                        OutlinedTextField(
-                            value = selecionado,
-                            shape = RoundedCornerShape(18.dp),
-                            onValueChange = { selecionado = it },
-                            modifier = Modifier
-                                .wrapContentSize(Alignment.TopStart)
-                                .fillMaxWidth(0.8f)
-                                .onGloballyPositioned { coordinates ->
-                                    textFieldSize = coordinates.size.toSize()
-                                },
-                            label = { Text("Categoria") },
-                            trailingIcon = {
-                                Icon(icon, "Categorias",
-                                    Modifier.clickable { expanded = !expanded })
-                            }
-                        )
-
-
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier
-                                .width(with(LocalDensity.current){textFieldSize.width.toDp()})
-                                .background(Color.LightGray)
-                        ) {
-                            categorias.forEach { label ->
-                                DropdownMenuItem(onClick = {
-                                    selecionado = label
-                                    expanded = false
-                                }
-                                ) {
-                                    Text(text = label)
-                                }
-                            }
-                        }
-                    }
+                    boxSelector(categorias = categorias, title = "Categoria")
                 }
+
                 item {
 
                     val dataGasto = remember { mutableStateOf(TextFieldValue()) }

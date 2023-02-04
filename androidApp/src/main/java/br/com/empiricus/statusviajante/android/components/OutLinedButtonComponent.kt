@@ -33,7 +33,7 @@ fun outLinedButtonComponent(
     modifier: Modifier = Modifier
 ) {
     OutlinedButton(onClick = onNavigationIconClick,
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
         modifier = modifier.fillMaxWidth(0.8f)
             .height(60.dp)
@@ -57,7 +57,7 @@ fun outLinedButtonTransparent(
 ) {
     OutlinedButton(onClick = onNavigationIconClick,
         border = BorderStroke(1.dp, color = MaterialTheme.colors.primary),
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.primary
