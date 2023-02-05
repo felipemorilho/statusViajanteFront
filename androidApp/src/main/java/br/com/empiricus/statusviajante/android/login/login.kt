@@ -16,41 +16,28 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.components.outLinedButtonComponent
-import br.com.empiricus.statusviajante.android.components.outLinedTextFildComponent
-import br.com.empiricus.statusviajante.android.components.topBarComponent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import br.com.empiricus.statusviajante.android.components.bottonBarComponent
-import kotlinx.coroutines.launch
+import br.com.empiricus.statusviajante.android.Route
+import br.com.empiricus.statusviajante.android.components.*
 
 
 @Composable
-fun Login(onBack: () -> Boolean) {
-
-    val scope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState()
-
+fun Login(onNavCadastro: () -> Unit) {
     fun entrar()  {
         println("user quer entrar")
     }
 
-    fun cadastrar() {
-        println("user quer cadastrar")
-    }
-
     MyApplicationTheme {
         Scaffold(
-            topBar = { topBarComponent(onClickNav = {onBack.invoke()}) },
+            topBar = { topBarComponent() },
             bottomBar = { bottonBarComponent(
-                onBack = {},
-                onNavDrawer = {
-                    scope.launch { scaffoldState.drawerState.open() }
-                }) }
+                colorBackButton = Color.Transparent,
+                colorMenuButton = Color.Transparent,
+                onNavDrawer = {}) }
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -81,13 +68,13 @@ fun Login(onBack: () -> Boolean) {
                 }
                 item {
                     val test = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = test, title = "SENHA")
+                    outLinedTextFildPassword(valor = test, title = "SENHA")
                 }
                 item {
                     outLinedButtonComponent(title = "ENTRAR", onNavigationIconClick= {entrar()})
                 }
                 item {
-                    outLinedButtonComponent(title = "CADASTRAR", onNavigationIconClick= {cadastrar()})
+                    outLinedButtonComponent(title = "CADASTRAR", onNavigationIconClick= {onNavCadastro.invoke()})
                 }
             }
             }
@@ -98,5 +85,5 @@ fun Login(onBack: () -> Boolean) {
 @Preview
 @Composable
 fun LoginPreview(){
-    Login (onBack = {true})
+    Login (onNavCadastro = {})
 }

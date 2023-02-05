@@ -1,15 +1,13 @@
 package br.com.empiricus.statusviajante.android.components
 
+import android.widget.CalendarView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
@@ -22,29 +20,33 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
 fun boxSelector(
     categorias: List<String>,
     title: String,
-    modifier: Modifier = Modifier
+    selecionado: MutableState<String>,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
 ){
+
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     val icon = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-    var selecionado by remember { mutableStateOf("") }
 
 
     Box {
         OutlinedTextField(
-            value = selecionado,
-            onValueChange = { selecionado = it },
+            value = selecionado.value,
+            onValueChange = { selecionado.value = it },
             modifier = modifier
                 .wrapContentSize(Alignment.TopStart)
                 .fillMaxWidth(0.8f)
+                .height(60.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
                 },
@@ -60,6 +62,7 @@ fun boxSelector(
                 Icon(icon, "Categorias",
                     Modifier.clickable { expanded = !expanded })
             },
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             shape = MaterialTheme.shapes.medium,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = MaterialTheme.colors.secondary,
@@ -73,7 +76,7 @@ fun boxSelector(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .width(with(LocalDensity.current){textFieldSize.width.toDp()})
                 .background(
                     brush = Brush.verticalGradient(
@@ -86,13 +89,82 @@ fun boxSelector(
         ) {
             categorias.forEach { label ->
                 DropdownMenuItem(onClick = {
-                    selecionado = label
+                    selecionado.value = label
                     expanded = false
                 }
                 ) {
                     Text(text = label)
                 }
             }
+        }
+    }
+}
+@Composable
+fun boxSelectorCalendar(
+    title: String,
+    modifier: Modifier = Modifier,
+    selecionado: MutableState<String>,
+
+){
+    var expanded by remember { mutableStateOf(false) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+
+
+    Box {
+
+        OutlinedTextField(
+            modifier = modifier
+                .fillMaxWidth(0.8f)
+                .height(60.dp)
+                .onGloballyPositioned { coordinates ->
+                    textFieldSize = coordinates.size.toSize()
+                },
+            value = selecionado.value,
+            onValueChange = { selecionado.value = it },
+            label = {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colors.secondary,
+                    style = TextStyle(
+                        shadow = Shadow(color = MaterialTheme.colors.secondary)
+                    )
+                ) },
+            trailingIcon = {
+                Icon(Icons.Filled.CalendarMonth, "Calendario",
+                    Modifier.clickable { expanded = !expanded })
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            shape = MaterialTheme.shapes.medium,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colors.secondary,
+                unfocusedBorderColor = MaterialTheme.colors.secondary,
+                focusedLabelColor = MaterialTheme.colors.secondary,
+                cursorColor = MaterialTheme.colors.secondary
+            )
+        )
+
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color.Gray
+                        )
+                    )
+                )
+        ) {
+            AndroidView(
+                factory = {CalendarView(it)},
+                update = {
+                    it.setOnDateChangeListener { _, year, month, day ->
+                    selecionado.value = "$day/$month/$year"
+                    expanded = false
+                }
+            })
         }
     }
 }

@@ -7,20 +7,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.components.outLinedButtonComponent
-import br.com.empiricus.statusviajante.android.components.outLinedTextFildComponent
-import br.com.empiricus.statusviajante.android.components.topBarComponent
+import br.com.empiricus.statusviajante.android.components.*
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 
 
 fun cadastrarUsuario(nome : String) {
@@ -30,7 +32,12 @@ fun cadastrarUsuario(nome : String) {
 fun cadastroUsuario(onBack: () -> Boolean) {
     MyApplicationTheme {
         Scaffold(
-            topBar = { topBarComponent(onClickNav = { onBack.invoke() }) }
+            topBar = { topBarComponent() },
+            bottomBar = { bottonBarComponent(
+                onBack = {onBack.invoke()},
+                colorMenuButton = Color.Transparent,
+                onNavDrawer = {})
+            }
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -73,9 +80,9 @@ fun cadastroUsuario(onBack: () -> Boolean) {
                 }
                 item {
                     val dataNascimento = remember {
-                    mutableStateOf(TextFieldValue())
+                    mutableStateOf("")
                     }
-                    outLinedTextFildComponent(valor = dataNascimento, title = "DATA NASCIMENTO")
+                    boxSelectorCalendar(selecionado = dataNascimento, title = "DATA NASCIMENTO")
                 }
                 item {
                     val celular = remember {

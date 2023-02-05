@@ -2,8 +2,6 @@ package br.com.empiricus.statusviajante.android.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -58,7 +56,7 @@ fun outLinedTextFildComponent(
 @Composable
 fun outLinedTextFildPassword (
     valor : MutableState<TextFieldValue>,
-    nome : String,
+    title : String,
     modifier: Modifier = Modifier
 ) {
 
@@ -74,7 +72,7 @@ fun outLinedTextFildPassword (
         onValueChange = { valor.value = it },
         label = {
             Text(
-                text = nome,
+                text = title,
                 color = MaterialTheme.colors.secondary,
                 style = TextStyle(shadow = Shadow(color = MaterialTheme.colors.secondary))
             )

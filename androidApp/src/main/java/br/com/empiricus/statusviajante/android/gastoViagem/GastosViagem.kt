@@ -1,23 +1,13 @@
 package br.com.empiricus.statusviajante.android.gastoViagem
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,10 +74,11 @@ fun GastosViagem(onBack: () -> Boolean) {
                 }
 
                 item {
+                    var selecionado: MutableState<String> = remember { mutableStateOf("") }
                     val categorias =
                         listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
 
-                    boxSelector(categorias = categorias, title = "Categoria")
+                    boxSelector(categorias = categorias, title = "Categoria", selecionado = selecionado)
                 }
 
                 item {

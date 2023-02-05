@@ -5,12 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -81,7 +77,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             horizontalAlignment = Alignment.Start
                         ) {
                             outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = origem,
                                 title = "Origem"
                             )
@@ -92,7 +88,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             horizontalAlignment = Alignment.End
                         ) {
                             outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = destino,
                                 title = "Destino"
                             )
@@ -101,19 +97,24 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
+                    var selecionado: MutableState<String> = remember { mutableStateOf("") }
                     val moedaCorrente = listOf(
                         "Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen"
                     )
 
-                    boxSelector(categorias = moedaCorrente, title = "Moeda Corrente")
+                    boxSelector(
+                        categorias = moedaCorrente,
+                        title = "Moeda Corrente",
+                        selecionado = selecionado
+                    )
                 }
 
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
-                        val dataInicio = remember { mutableStateOf(TextFieldValue()) }
-                        val dataFinal = remember { mutableStateOf(TextFieldValue()) }
+                        val dataInicio: MutableState<String> = remember { mutableStateOf("") }
+                        val dataFinal : MutableState<String> = remember { mutableStateOf("") }
                         val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
                         val orcamentoDiario = remember { mutableStateOf(TextFieldValue()) }
 
@@ -121,13 +122,10 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             modifier = Modifier.fillMaxWidth(0.5f),
                             horizontalAlignment = Alignment.Start
                         ) {
-                            outLinedTextFildIcon(
+                            boxSelectorCalendar(
                                 modifier = Modifier.fillMaxWidth(0.95f),
-                                valor = dataInicio,
                                 title = "Data inicio",
-                                icon = Icons.Filled.CalendarMonth,
-                                description = "Calendario do mes",
-                                onClick = {}
+                                selecionado = dataInicio
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(
@@ -141,13 +139,10 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.End
                         ) {
-                            outLinedTextFildIcon(
+                            boxSelectorCalendar(
                                 modifier = Modifier.fillMaxWidth(0.95f),
-                                valor = dataFinal,
                                 title = "Data final",
-                                icon = Icons.Filled.CalendarMonth,
-                                description = "Calendario do mes",
-                                onClick = {}
+                                selecionado = dataFinal
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(

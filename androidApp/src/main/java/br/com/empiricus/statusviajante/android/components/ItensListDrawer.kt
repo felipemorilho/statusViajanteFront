@@ -2,7 +2,6 @@ package br.com.empiricus.statusviajante.android.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.Create
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -14,9 +13,9 @@ data class MenuItens(
 )
 
 @Composable
-fun listaItensDrawer(): List<MenuItens>{
+fun listaItensDrawer(): List<MenuItens> {
 
-    val listaItensPJ = listOf<MenuItens>(
+    return listOf(
         MenuItens(
             id = "Home",
             title = "Home",
@@ -24,26 +23,20 @@ fun listaItensDrawer(): List<MenuItens>{
             icon = Icons.Filled.Home
         ),
         MenuItens(
-            id = "Indicadores",
-            title = "Consultar indicadores",
-            contentDescription = "Ir para tela de indicadores",
+            id = "Viagens",
+            title = "Minhas Viagens",
+            contentDescription = "Ir para tela de viagem",
             icon = Icons.Filled.Insights
         ),
         MenuItens(
-            id = "Meus ativos",
-            title = "Meus ativos",
+            id = "Criar Viagem",
+            title = "Nova Viagem",
             contentDescription = "Ir para tela de ativos",
             icon = Icons.Filled.Money
         ),
         MenuItens(
-            id = "Cadastrar ativos",
-            title = "Cadastrar ativo",
-            contentDescription = "Ir para tela de cadastro de ativos",
-            icon = Icons.Rounded.Create
-        ),
-        MenuItens(
-            id = "Meus dados",
-            title = "Meus dados",
+            id = "Meus Dados",
+            title = "Meus Dados",
             contentDescription = "Ir para tela de dados da conta",
             icon = Icons.Filled.EditAttributes
         ),
@@ -54,5 +47,4 @@ fun listaItensDrawer(): List<MenuItens>{
             icon = Icons.Filled.Logout
         )
     )
-    return listaItensPJ
 }

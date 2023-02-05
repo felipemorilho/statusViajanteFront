@@ -6,20 +6,22 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.empiricus.statusviajante.android.cadastroUsuario.cadastrarUsuario
+import br.com.empiricus.statusviajante.android.cadastroUsuario.cadastroUsuario
 import br.com.empiricus.statusviajante.android.cadastroviagens.cadastroViagens
-import br.com.empiricus.statusviajante.android.gastoViagem.GastosViagem
+import br.com.empiricus.statusviajante.android.login.Login
 
 enum class  Route {
     Login,
+    Cadastro,
     CadastroViagens,
-    Test
 }
 
 @Composable
 fun navigator(
     modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController(),
-    initial: Route = Route.CadastroViagens
+    initial: Route = Route.Login
 ) {
     NavHost(
         navController = navHostController,
@@ -30,11 +32,16 @@ fun navigator(
                 navHostController.popBackStack()
             }
         }
-        composable(Route.Test.name){
-
-            GastosViagem{
+        composable(Route.Login.name){
+           Login {
+               navHostController.navigate(Route.Cadastro.name)
+           }
+        }
+        composable(Route.Cadastro.name){
+            cadastroUsuario{
                 navHostController.popBackStack()
             }
         }
+
     }
 }
