@@ -7,22 +7,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.launch
 
 
 fun cadastrarUsuario(nome : String) {
@@ -69,32 +66,31 @@ fun cadastroUsuario(onBack: () -> Boolean) {
 
                 item {
                     val email = remember {
-                    mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = email, title = "EMAIL")
+                        mutableStateOf(TextFieldValue()) }
+                    outLinedTextFildComponent(valor = email, title = "EMAIL", keyboardType = KeyboardType.Email)
                 }
 
                 item {
                     val senha = remember {
-                    mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = senha, title = "SENHA")
+                        mutableStateOf(TextFieldValue()) }
+                    outLinedTextFildPassword(valor = senha, title = "SENHA")
                 }
                 item {
                     val dataNascimento = remember {
-                    mutableStateOf("")
+                        mutableStateOf("")
                     }
                     boxSelectorCalendar(selecionado = dataNascimento, title = "DATA NASCIMENTO")
                 }
                 item {
                     val celular = remember {
-                    mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = celular, title = "CELULAR")
+                        mutableStateOf(TextFieldValue()) }
+                    outLinedTextFildComponent(valor = celular, title = "CELULAR", keyboardType = KeyboardType.Phone)
                 }
                 item {
                     Spacer(modifier = Modifier.height(25.dp))
                     outLinedButtonComponent(onNavigationIconClick = {  cadastrarUsuario("CADASTRO") }, title = "Cadastrar usuário")
                 }
             }
-
         }
     }
 }

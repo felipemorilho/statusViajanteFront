@@ -21,6 +21,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
 
@@ -64,7 +65,7 @@ fun Login(onNavCadastro: () -> Unit) {
                 }
                 item {
                     val test = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = test, title = "EMAIL")
+                    outLinedTextFildComponent(valor = test, title = "EMAIL", keyboardType = KeyboardType.Email)
                 }
                 item {
                     val test = remember { mutableStateOf(TextFieldValue()) }

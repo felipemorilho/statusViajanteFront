@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.dp
 fun outLinedTextFildComponent(
     valor : MutableState<TextFieldValue>,
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
 ){
     OutlinedTextField(
         modifier = modifier
@@ -42,6 +43,7 @@ fun outLinedTextFildComponent(
                 )
             )
         },
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
@@ -51,7 +53,6 @@ fun outLinedTextFildComponent(
         )
     )
 }
-
 
 @Composable
 fun outLinedTextFildPassword (
@@ -96,54 +97,6 @@ fun outLinedTextFildPassword (
             unfocusedBorderColor = MaterialTheme.colors.secondary,
             focusedLabelColor = MaterialTheme.colors.secondary,
             cursorColor = MaterialTheme.colors.secondary,
-
-            )
-    )
-
-}
-
-@Composable
-fun outLinedTextFildIcon(
-    valor : MutableState<TextFieldValue>,
-    title: String,
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    description: String,
-    onClick: () -> Unit
-){
-    OutlinedTextField(
-        modifier = modifier
-            .fillMaxWidth(0.8f)
-            .height(60.dp),
-        value = valor.value,
-        onValueChange = { valor.value = it },
-        trailingIcon = {
-            IconButton(
-                onClick = {onClick}
-            ){
-                Icon(
-                    imageVector = icon,
-                    contentDescription = description,
-                    tint = MaterialTheme.colors.primary
-                )
-            }
-        },
-        label = {
-            Text(
-                text = title,
-                color = MaterialTheme.colors.secondary,
-                style = TextStyle(
-                    shadow = Shadow(color = MaterialTheme.colors.secondary)
-                )
-            )
-        },
-        shape = MaterialTheme.shapes.medium,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colors.secondary,
-            unfocusedBorderColor = MaterialTheme.colors.secondary,
-            focusedLabelColor = MaterialTheme.colors.secondary,
-            cursorColor = MaterialTheme.colors.secondary
         )
     )
 }
-

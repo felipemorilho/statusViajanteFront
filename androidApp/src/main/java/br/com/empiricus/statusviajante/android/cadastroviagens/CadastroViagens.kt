@@ -4,12 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,7 +30,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 onBack = {onBack.invoke()},
                 onNavDrawer = {
                     scope.launch { scaffoldState.drawerState.open() }
-            }) },
+                }) },
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 drawerHeader()
@@ -97,7 +96,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    var selecionado: MutableState<String> = remember { mutableStateOf("") }
+                    val selecionado: MutableState<String> = remember { mutableStateOf("") }
                     val moedaCorrente = listOf(
                         "Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen"
                     )
@@ -131,7 +130,8 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             outLinedTextFildComponent(
                                 modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = orcamentoTotal,
-                                title = "Orçamento total"
+                                title = "Orçamento total",
+                                keyboardType = KeyboardType.Number
                             )
                         }
 
@@ -148,14 +148,20 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             outLinedTextFildComponent(
                                 modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = orcamentoDiario,
-                                title = "Orçamento diario"
+                                title = "Orçamento diario",
+                                keyboardType = KeyboardType.Number
                             )
                         }
                     }
                 }
+
                 item {
                     val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = quantidadeVianjantes, title = "Quantidade de viajantes no grupo")
+                    outLinedTextFildComponent(
+                        valor = quantidadeVianjantes,
+                        title = "Quantidade de viajantes no grupo",
+                        keyboardType = KeyboardType.Number
+                    )
                 }
 
                 item {

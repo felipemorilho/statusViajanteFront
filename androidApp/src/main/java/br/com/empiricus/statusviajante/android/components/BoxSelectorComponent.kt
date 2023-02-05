@@ -24,6 +24,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.viewinterop.AndroidView
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.MonthDay.now
 
 @Composable
 fun boxSelector(
@@ -105,7 +108,7 @@ fun boxSelectorCalendar(
     modifier: Modifier = Modifier,
     selecionado: MutableState<String>,
 
-){
+    ){
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -158,13 +161,15 @@ fun boxSelectorCalendar(
                 )
         ) {
             AndroidView(
+                modifier = Modifier.wrapContentSize(),
                 factory = {CalendarView(it)},
                 update = {
                     it.setOnDateChangeListener { _, year, month, day ->
-                    selecionado.value = "$day/$month/$year"
-                    expanded = false
+                        selecionado.value = "$day/$month/$year"
+                        expanded = false
+                    }
                 }
-            })
+            )
         }
     }
 }
