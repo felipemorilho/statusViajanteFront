@@ -22,12 +22,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
 
 
 @Composable
-fun Login(onNavCadastro: () -> Unit) {
+fun Login(onNavCadastro: () -> Unit, onNavHomeViagens: () -> Unit) {
     fun entrar()  {
         println("user quer entrar")
     }
@@ -72,7 +71,7 @@ fun Login(onNavCadastro: () -> Unit) {
                     outLinedTextFildPassword(valor = test, title = "SENHA")
                 }
                 item {
-                    outLinedButtonComponent(title = "ENTRAR", onNavigationIconClick= {entrar()})
+                    outLinedButtonComponent(title = "ENTRAR", onNavigationIconClick= {onNavHomeViagens.invoke()})
                 }
                 item {
                     outLinedButtonComponent(title = "CADASTRAR", onNavigationIconClick= {onNavCadastro.invoke()})
@@ -86,5 +85,5 @@ fun Login(onNavCadastro: () -> Unit) {
 @Preview
 @Composable
 fun LoginPreview(){
-    Login (onNavCadastro = {})
+    Login (onNavCadastro = {}, onNavHomeViagens = {})
 }

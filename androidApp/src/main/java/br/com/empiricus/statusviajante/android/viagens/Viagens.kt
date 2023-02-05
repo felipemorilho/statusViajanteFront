@@ -1,29 +1,54 @@
 package br.com.empiricus.statusviajante.android.viagens
 
-import br.com.empiricus.statusviajante.android.components.listaViagemComponent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.components.outLinedButtonTransparent
+import br.com.empiricus.statusviajante.android.Route
+import br.com.empiricus.statusviajante.android.components.*
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun Viagens(onNavTest: () -> Unit) {
+fun Viagens(onNavCadastroViagens: () -> Unit) {
     MyApplicationTheme {
+        val scope = rememberCoroutineScope()
+        val scaffoldState = rememberScaffoldState()
         Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = { topBarComponent() },
+            bottomBar = { bottonBarComponent(
+                colorBackButton = Color.Transparent,
+                onNavDrawer = {
+                    scope.launch { scaffoldState.drawerState.open() }
+                }) },
+            drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+            drawerContent = {
+                drawerHeader()
+                drawerBody(
+                    itens = listaItensDrawer(),
+                    onItemClick = {
+                        when(it.id) {
+
+                        }
+                    }
+                )
+            }
+
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -42,47 +67,47 @@ fun Viagens(onNavTest: () -> Unit) {
             ) {
 
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .padding(55.dp)
-                    ) {
-                        Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                    }
+                    Spacer(modifier = Modifier.height(25.dp))
+                    Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 }
                 item {
 
                     Column(
+                        modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
                         listaViagemComponent(
                             id = 1,
                             title = "Ferias",
                             dataIda = "06/02/2023",
-                            dataVolta = "15/02/2022"
+                            dataVolta = "15/02/2022",
+                            onItemClick = {}
                         )
                         listaViagemComponent(
                             id = 2,
                             title = "Reunião Da Empresa",
                             dataIda = "25/03/2023",
-                            dataVolta = "28/03/2022"
+                            dataVolta = "28/03/2022",
+                            onItemClick = {}
                         )
                         listaViagemComponent(
                             id = 3,
                             title = "Dublin",
                             dataIda = "19/09/2023",
-                            dataVolta = "01/10/2023"
+                            dataVolta = "01/10/2023",
+                            onItemClick = {}
                         )
                         listaViagemComponent(
                             id = 3,
                             title = "São Paulo ",
                             dataIda = "03/05/2023",
-                            dataVolta = "10/05/2023"
+                            dataVolta = "10/05/2023",
+                            onItemClick = {}
                         )
                     }
                 }
                 item {
-                    outLinedButtonTransparent(
-                        onNavigationIconClick = { onNavTest.invoke() },
+                    outLinedButtonComponent(
+                        onNavigationIconClick = {onNavCadastroViagens.invoke()},
                         title = "ADICIONAR NOVA VIAGEM"
                     )
                     Spacer(modifier = Modifier.height(25.dp))
@@ -96,5 +121,7 @@ fun Viagens(onNavTest: () -> Unit) {
 @Preview
 @Composable
 fun previewViagens() {
-    Viagens(onNavTest = {})
+    Viagens {
+        {}
+    }
 }

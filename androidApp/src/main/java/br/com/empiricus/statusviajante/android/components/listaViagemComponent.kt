@@ -21,11 +21,12 @@ import androidx.compose.ui.unit.sp
 @JvmOverloads
 @Composable
 fun listaViagemComponent(
-    onItemClick: () -> Unit = {},
+    onItemClick: () -> Unit,
     id: Long,
     title: String,
     dataIda: String,
-    dataVolta: String
+    dataVolta: String,
+    modifier: Modifier = Modifier
 ) {
     Row() {
         Card(
@@ -41,13 +42,11 @@ fun listaViagemComponent(
             ) {
                 Column() {
                     Text(
-                        text =
-                        title,
+                        text = title,
                         color = MaterialTheme.colors.primary,
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
-
 
                     Row(
                         modifier = Modifier.fillMaxWidth(0.9f)
@@ -102,9 +101,8 @@ fun listaViagemComponent(
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }
 }
+
