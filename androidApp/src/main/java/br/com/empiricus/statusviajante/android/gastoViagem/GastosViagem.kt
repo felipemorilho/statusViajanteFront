@@ -83,8 +83,8 @@ fun GastosViagem(onBack: () -> Boolean) {
 
                 item {
 
-                    val dataGasto = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = dataGasto, title = "Data")
+                    val dataGasto = remember { mutableStateOf("") }
+                    boxSelectorCalendar(title = "Data", selecionado = dataGasto)
                 }
 
                 item {

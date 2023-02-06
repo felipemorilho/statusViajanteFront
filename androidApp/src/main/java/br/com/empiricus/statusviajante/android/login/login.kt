@@ -20,7 +20,10 @@ import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import br.com.empiricus.statusviajante.android.components.*
 
@@ -56,10 +59,11 @@ fun Login(onNavCadastro: () -> Unit, onNavHomeViagens: () -> Unit) {
             ){
                 item {
                     Image(
-                        painter = painterResource(id = R.drawable.logo_azul),
-                        contentDescription = "",
+                        imageVector = ImageVector.vectorResource(id = R.drawable.logocircular),
+                        contentDescription = "Logo circular do projeto",
                         modifier = Modifier.width(250.dp)
-                            .height(250.dp)
+                            .height(250.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
                     )
                 }
                 item {

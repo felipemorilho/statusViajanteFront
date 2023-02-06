@@ -6,7 +6,7 @@
             @color/padraoApp
         </item>
         <item name="android:windowSplashScreenAnimatedIcon">
-            @drawable/logo_branca
+            @drawable/logocircular
         </item>
         <item name="android:windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
