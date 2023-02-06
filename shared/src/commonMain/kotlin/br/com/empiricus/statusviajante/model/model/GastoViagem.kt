@@ -1,11 +1,12 @@
-package br.com.empiricus.statusviajante.model
+package br.com.empiricus.statusviajante.model.model
 
-import kotlinx.datetime.LocalDate
+import br.com.empiricus.statusviajante.model.util.DateSerialize
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class GastoViagem (
-    val dataGasto: LocalDate,
+    @Serializable(with = DateSerialize::class)
+    val dataGasto: String,
     val categoria: Categoria,
     val valor: Double,
     val descricao: String

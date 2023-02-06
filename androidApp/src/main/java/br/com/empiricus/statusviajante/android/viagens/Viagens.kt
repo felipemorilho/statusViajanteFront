@@ -18,8 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
+import br.com.empiricus.statusviajante.model.MockListaViagens
 import kotlinx.coroutines.launch
 
 
@@ -70,41 +70,17 @@ fun Viagens(onNavCadastroViagens: () -> Unit) {
                     Spacer(modifier = Modifier.height(25.dp))
                     Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 }
-                item {
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(0.8f)
-                    ) {
-                        listaViagemComponent(
-                            id = 1,
-                            title = "Ferias",
-                            dataIda = "06/02/2023",
-                            dataVolta = "15/02/2022",
-                            onItemClick = {}
-                        )
-                        listaViagemComponent(
-                            id = 2,
-                            title = "Reunião Da Empresa",
-                            dataIda = "25/03/2023",
-                            dataVolta = "28/03/2022",
-                            onItemClick = {}
-                        )
-                        listaViagemComponent(
-                            id = 3,
-                            title = "Dublin",
-                            dataIda = "19/09/2023",
-                            dataVolta = "01/10/2023",
-                            onItemClick = {}
-                        )
-                        listaViagemComponent(
-                            id = 3,
-                            title = "São Paulo ",
-                            dataIda = "03/05/2023",
-                            dataVolta = "10/05/2023",
-                            onItemClick = {}
-                        )
-                    }
+                val viagens = MockListaViagens.listaViagem
+                items(viagens.size){
+                    listaViagemComponent(
+                        onItemClick = {},
+                        id = viagens[it].id,
+                        title = viagens[it].nome,
+                        dataIda = viagens[it].dataInicio,
+                        dataVolta = viagens[it].dataFinal
+                    )
                 }
+                
                 item {
                     outLinedButtonComponent(
                         onNavigationIconClick = {onNavCadastroViagens.invoke()},

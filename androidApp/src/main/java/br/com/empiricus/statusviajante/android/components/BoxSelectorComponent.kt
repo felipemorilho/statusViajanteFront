@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.viewinterop.AndroidView
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.MonthDay.now
 
@@ -167,7 +166,7 @@ fun boxSelectorCalendar(
                 factory = {CalendarView(it)},
                 update = {
                     it.setOnDateChangeListener { _, year, month, day ->
-                        selecionado.value = "$day/$month/$year"
+                        selecionado.value = "$day/$month + 1/$year"
                         expanded = false
                     }
                 }

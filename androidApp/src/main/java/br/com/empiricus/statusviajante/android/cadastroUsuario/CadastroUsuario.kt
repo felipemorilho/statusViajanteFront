@@ -1,6 +1,5 @@
 package br.com.empiricus.statusviajante.android.cadastroUsuario
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,9 +21,6 @@ import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
 
 
-fun cadastrarUsuario(nome : String) {
-    Log.i("Cadastrar Usuario", nome)
-}
 @Composable
 fun cadastroUsuario(onBack: () -> Boolean) {
     MyApplicationTheme {
@@ -55,40 +51,39 @@ fun cadastroUsuario(onBack: () -> Boolean) {
                 item{
                     Spacer(modifier = Modifier.height(35.dp))
                     Text(text = "BEM-VINDO")
-
                 }
 
                 item {
                     val nomeUsuario = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = nomeUsuario, title = "NOME")
-
                 }
 
                 item {
-                    val email = remember {
-                        mutableStateOf(TextFieldValue()) }
+                    val email = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = email, title = "EMAIL", keyboardType = KeyboardType.Email)
                 }
 
                 item {
-                    val senha = remember {
-                        mutableStateOf(TextFieldValue()) }
+                    val senha = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildPassword(valor = senha, title = "SENHA")
                 }
+
                 item {
-                    val dataNascimento = remember {
-                        mutableStateOf("")
-                    }
+                    val dataNascimento = remember { mutableStateOf("") }
                     boxSelectorCalendar(selecionado = dataNascimento, title = "DATA NASCIMENTO")
                 }
+
                 item {
-                    val celular = remember {
-                        mutableStateOf(TextFieldValue()) }
+                    val celular = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = celular, title = "CELULAR", keyboardType = KeyboardType.Phone)
                 }
+
                 item {
                     Spacer(modifier = Modifier.height(25.dp))
-                    outLinedButtonComponent(onNavigationIconClick = {  cadastrarUsuario("CADASTRO") }, title = "Cadastrar usuário")
+                    outLinedButtonComponent(
+                        onNavigationIconClick = {},
+                        title = "Cadastrar usuário"
+                    )
                 }
             }
         }

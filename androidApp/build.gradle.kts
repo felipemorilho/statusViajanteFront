@@ -44,5 +44,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
     implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
 }
