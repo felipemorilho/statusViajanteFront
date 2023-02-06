@@ -8,7 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.empiricus.statusviajante.android.cadastroUsuario.cadastroUsuario
 import br.com.empiricus.statusviajante.android.cadastroviagens.cadastroViagens
+import br.com.empiricus.statusviajante.android.gastoViagem.GastosViagem
 import br.com.empiricus.statusviajante.android.login.Login
+import br.com.empiricus.statusviajante.android.viagens.DescViagens
 import br.com.empiricus.statusviajante.android.viagens.Viagens
 
 enum class  Route {
@@ -17,6 +19,7 @@ enum class  Route {
     CadastroViagens,
     HomeViagens,
     DetalheViagem,
+    NovoGastoViagem
 }
 
 @Composable
@@ -49,6 +52,18 @@ fun navigator(
             Viagens(
                 onNavCadastroViagens = {navHostController.navigate(Route.CadastroViagens.name)},
                 onNavViagem = {navHostController.navigate(Route.DetalheViagem.name)}
+            )
+        }
+        composable(Route.DetalheViagem.name){
+            DescViagens(
+                onNavNovoGasto = { navHostController.navigate(Route.NovoGastoViagem.name) },
+                onBack = { navHostController.popBackStack() }
+            )
+        }
+        composable(Route.NovoGastoViagem.name){
+            GastosViagem(
+                onBack = { navHostController.popBackStack() },
+
             )
         }
 

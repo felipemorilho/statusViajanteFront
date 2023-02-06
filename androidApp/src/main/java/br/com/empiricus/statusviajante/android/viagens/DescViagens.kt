@@ -1,23 +1,19 @@
 package br.com.empiricus.statusviajante.android.viagens
 
-import android.widget.Button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
 import br.com.empiricus.statusviajante.model.MockGastoViagem
 import br.com.empiricus.statusviajante.model.MockListaViagens
@@ -25,7 +21,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun DescViagens() {
+fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
     MyApplicationTheme {
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState()
@@ -34,7 +30,7 @@ fun DescViagens() {
             topBar = { topBarComponent() },
             bottomBar = {
                 bottonBarComponent(
-                    colorBackButton = Color.Transparent,
+                    onBack = { onBack.invoke() },
                     onNavDrawer = {
                         scope.launch { scaffoldState.drawerState.open() }
                     })
@@ -53,8 +49,9 @@ fun DescViagens() {
             }
 
         ) {
-            LazyColumn(
+            Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -63,22 +60,18 @@ fun DescViagens() {
                             )
                         )
                     )
-                    .fillMaxSize()
-                    .padding(it),
-                verticalArrangement = Arrangement.spacedBy(25.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    val gastosTotais = MockGastoViagem.gastosTotais
+                    val viagem = MockListaViagens.listaViagem
 
-                val gastos = MockGastoViagem.gastos
-                val gastosTotais = MockGastoViagem.gastosTotais
-                val viagem = MockListaViagens.listaViagem
-
-                item {
                     Spacer(modifier = Modifier.height(25.dp))
-                    Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                }
+                    Text(text = viagem[0].nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
 
-                item {
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f),
                         horizontalArrangement = Arrangement.Start
@@ -117,33 +110,46 @@ fun DescViagens() {
                             Text(text = viagem[0].descricao, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
                     }
+                    Spacer(modifier = Modifier.height(17.dp))
                 }
-                items(gastos.size) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(0.8f)
-                    ) {
-                        DescViagemComponent(
-                            id = gastos[it].id,
-                            title = gastos[it].descricao,
-                            valor = gastos[it].valor,
-                            onItemClick = {}
-                        )
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.65f)
+                        .padding(it),
+                    verticalArrangement = Arrangement.spacedBy(25.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    val gastos = MockGastoViagem.gastos
+
+                    items(gastos.size) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(0.8f)
+                        ) {
+                            DescViagemComponent(
+                                id = gastos[it].id,
+                                title = gastos[it].descricao,
+                                valor = gastos[it].valor,
+                                onItemClick = {}
+                            )
+                        }
                     }
                 }
-                item {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     outLinedButtonComponent(
-                        onNavigationIconClick = {  },
+                        onNavigationIconClick = { onNavNovoGasto.invoke() },
                         title = "ADICIONAR NOVO GASTO"
                     )
-                    Spacer(modifier = Modifier.height(55.dp))
-                }
+                    Spacer(modifier = Modifier.height(25.dp))
 
-                item {
                     outLinedButtonComponent(
                         onNavigationIconClick = { },
                         title = "SALVAR"
                     )
-
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             }
@@ -155,5 +161,5 @@ fun DescViagens() {
 @Preview
 @Composable
 fun previewDescViagens() {
-    DescViagens()
+    DescViagens ({},{true})
 }

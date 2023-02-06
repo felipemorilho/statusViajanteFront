@@ -26,9 +26,7 @@ fun listaViagemComponent(
     Row() {
         Card(
             modifier = Modifier.padding(bottom = 0.5.dp)
-                .clickable{
-                    onItemClick
-                }
+                .clickable(onClick = onItemClick)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

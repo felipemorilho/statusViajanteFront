@@ -49,9 +49,12 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                 )
             }
 
-        ) { it ->
-            LazyColumn(
+        ) {it ->
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
+                    .fillMaxSize()
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -60,29 +63,36 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                             )
                         )
                     )
-                    .fillMaxSize()
-                    .padding(it),
-                verticalArrangement = Arrangement.spacedBy(25.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .fillMaxHeight(0.65f)
+                        .padding(it),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                item {
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                    item {
+                        Spacer(modifier = Modifier.height(25.dp))
+                        Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                    }
+                    val viagens = MockListaViagens.listaViagem
+                    items(viagens.size){
+                        listaViagemComponent(
+                            onItemClick = { onNavViagem.invoke() },
+                            id = viagens[it].id,
+                            title = viagens[it].nome,
+                            dataIda = viagens[it].dataInicio,
+                            dataVolta = viagens[it].dataFinal
+                        )
+                    }
                 }
-                val viagens = MockListaViagens.listaViagem
-                items(viagens.size){
-                    listaViagemComponent(
-                        onItemClick = { onNavCadastroViagens.invoke() },
-                        id = viagens[it].id,
-                        title = viagens[it].nome,
-                        dataIda = viagens[it].dataInicio,
-                        dataVolta = viagens[it].dataFinal
-                    )
-
-                }
-                
-                item {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     outLinedButtonComponent(
                         onNavigationIconClick = {onNavCadastroViagens.invoke()},
                         title = "ADICIONAR NOVA VIAGEM"

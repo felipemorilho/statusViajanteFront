@@ -30,12 +30,13 @@ fun DescViagemComponent(
     Row() {
         Card(
             modifier = Modifier.padding(bottom = 0.5.dp)
+                .clickable { onItemClick }
 
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
+                    .fillMaxWidth()
                     .padding(20.dp)
             ) {
                 Column(

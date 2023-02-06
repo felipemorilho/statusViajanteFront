@@ -16,7 +16,7 @@ object MockListaViagens {
                 orcamentoTotak = 15000.00,
                 orcamentoDiario = 1363.00,
                 quantidadeViajantes = 3,
-                descricao = "Viagem de ferias com a familia nas praias do caribe"
+                descricao = "Viagem de ferias"
             ),
             Viagem(
                 id = 2,
