@@ -98,7 +98,7 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.95f),
                             horizontalAlignment = Alignment.End
                         ) {
-                            Text(text = "2150-,00", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            Text(text = "2500,00", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
                     }
                     Row(
@@ -126,8 +126,14 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
                         )
                         DescViagemComponent(
                             id = 2,
-                            title = "Restaurante",
+                            title = "$,Restaurante",
                             valor = "150,00",
+                            onItemClick = {}
+                        )
+                        DescViagemComponent(
+                            id = 3,
+                            title = "Compras",
+                            valor = "350,00",
                             onItemClick = {}
                         )
 

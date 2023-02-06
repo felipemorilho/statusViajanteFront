@@ -16,6 +16,7 @@ enum class  Route {
     Cadastro,
     CadastroViagens,
     HomeViagens,
+
 }
 
 @Composable
