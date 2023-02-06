@@ -1,9 +1,16 @@
 # StatusViajante
 Projeto Integrador Kotlin
 
+<p align="center">
+  <img src="https://github.com/felipemorilho/statusViajanteFront/blob/documentacao/public/logo.png" alt="logo" width="100" />
+</p>
+<br>
+
+
 ## Sobre
 
 Status:Viajante é um aplicativo em desenvolvimento que terá como objetivo o controle de gastos financeiros em viagens.
+
 O usuário deste aplicativo será qualquer um que deseje organizar os gastos de suas viagens. Para isso, as principais features implementadas são:
 
 1. Cadastro do Usuário.
@@ -26,11 +33,11 @@ documentação e outros.
 3. Pronto! Você ja pode utilizar nosso app.
 
 ## Report/Feedback
-_______
+
 Em caso de problemas, favor abrir uma [issue](https://github.com/felipemorilho/StatusViajante/issues)
 
 ## FRONT-END
-___________
+
 O aplicativo está em construção na linguagem Kotlin.
 
 
