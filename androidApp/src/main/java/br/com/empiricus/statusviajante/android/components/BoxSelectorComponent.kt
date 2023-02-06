@@ -166,7 +166,8 @@ fun boxSelectorCalendar(
                 factory = {CalendarView(it)},
                 update = {
                     it.setOnDateChangeListener { _, year, month, day ->
-                        selecionado.value = "$day/$month + 1/$year"
+                        val mes = month + 1
+                        selecionado.value = "$day/$mes/$year"
                         expanded = false
                     }
                 }
