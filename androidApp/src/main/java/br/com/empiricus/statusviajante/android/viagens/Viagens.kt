@@ -79,6 +79,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit) {
                         dataIda = viagens[it].dataInicio,
                         dataVolta = viagens[it].dataFinal
                     )
+
                 }
                 
                 item {
