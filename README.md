@@ -2,7 +2,7 @@
 Projeto Integrador Kotlin
 
 <p align="center">
-  <img src="https://github.com/felipemorilho/statusViajanteFront/blob/documentacao/public/logo.png" alt="logo" width="100" />
+  <img src="https://github.com/felipemorilho/statusViajanteFront/blob/documentacao/public/logo.png" alt="logo" width="400" />
 </p>
 <br>
 
