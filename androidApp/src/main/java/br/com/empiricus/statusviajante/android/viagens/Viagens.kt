@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun Viagens(onNavCadastroViagens: () -> Unit) {
+fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
     MyApplicationTheme {
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState()
@@ -49,7 +49,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit) {
                 )
             }
 
-        ) {
+        ) { it ->
             LazyColumn(
                 modifier = Modifier
                     .background(
@@ -73,7 +73,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit) {
                 val viagens = MockListaViagens.listaViagem
                 items(viagens.size){
                     listaViagemComponent(
-                        onItemClick = {},
+                        onItemClick = { onNavCadastroViagens.invoke() },
                         id = viagens[it].id,
                         title = viagens[it].nome,
                         dataIda = viagens[it].dataInicio,
@@ -98,7 +98,5 @@ fun Viagens(onNavCadastroViagens: () -> Unit) {
 @Preview
 @Composable
 fun previewViagens() {
-    Viagens {
-        {}
-    }
+    Viagens({},{})
 }

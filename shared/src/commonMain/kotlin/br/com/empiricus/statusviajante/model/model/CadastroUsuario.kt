@@ -11,6 +11,4 @@ data class CadastroUsuario(
     @Serializable(with = DateSerialize::class)
     val dataNascimento: String,
     val celular: String
-        ){
-
-}
+        )

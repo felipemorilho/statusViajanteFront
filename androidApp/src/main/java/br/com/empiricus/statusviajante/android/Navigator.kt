@@ -16,6 +16,7 @@ enum class  Route {
     Cadastro,
     CadastroViagens,
     HomeViagens,
+    DetalheViagem,
 }
 
 @Composable
@@ -45,9 +46,10 @@ fun navigator(
             }
         }
         composable(Route.HomeViagens.name){
-            Viagens {
-                navHostController.navigate(Route.CadastroViagens.name)
-            }
+            Viagens(
+                onNavCadastroViagens = {navHostController.navigate(Route.CadastroViagens.name)},
+                onNavViagem = {navHostController.navigate(Route.DetalheViagem.name)}
+            )
         }
 
     }

@@ -1,6 +1,7 @@
 package br.com.empiricus.statusviajante.android.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -11,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.datetime.LocalDate
 
 
 @Composable
@@ -26,14 +26,15 @@ fun listaViagemComponent(
     Row() {
         Card(
             modifier = Modifier.padding(bottom = 0.5.dp)
-
+                .clickable{
+                    onItemClick
+                }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
-                    .clickable { onItemClick }
             ) {
                 Column() {
                     Text(
@@ -77,7 +78,7 @@ fun listaViagemComponent(
                             horizontalAlignment = Alignment.Start
                         ) {
                             Text(
-                                text = dataIda.toString(),
+                                text = dataIda,
                                 color = MaterialTheme.colors.primary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 12.sp
@@ -88,7 +89,7 @@ fun listaViagemComponent(
                             horizontalAlignment = Alignment.End
                         ) {
                             Text(
-                                text = dataVolta.toString(),
+                                text = dataVolta,
                                 color = MaterialTheme.colors.primary,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 12.sp
@@ -98,6 +99,7 @@ fun listaViagemComponent(
                 }
             }
         }
+
     }
 }
 

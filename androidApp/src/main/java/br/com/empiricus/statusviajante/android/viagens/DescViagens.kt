@@ -19,11 +19,13 @@ import androidx.compose.ui.unit.sp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
+import br.com.empiricus.statusviajante.model.MockGastoViagem
+import br.com.empiricus.statusviajante.model.MockListaViagens
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun DescViagens(onNavCadastroViagens: () -> Unit) {
+fun DescViagens() {
     MyApplicationTheme {
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState()
@@ -67,12 +69,14 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
+                val gastos = MockGastoViagem.gastos
+                val gastosTotais = MockGastoViagem.gastosTotais
+                val viagem = MockListaViagens.listaViagem
 
                 item {
                     Spacer(modifier = Modifier.height(25.dp))
                     Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 }
-                /*===================================================================*/
 
                 item {
                     Row(
@@ -85,7 +89,7 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.95f),
                             horizontalAlignment = Alignment.End
                         ) {
-                            Text(text = "06/02/2023 - 15/02/2023", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            Text(text = "${viagem[0].dataInicio} - ${viagem[0].dataFinal}", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
                     }
                     Row(
@@ -98,7 +102,7 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.95f),
                             horizontalAlignment = Alignment.End
                         ) {
-                            Text(text = "2150-,00", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            Text(text = gastosTotais.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
                     }
                     Row(
@@ -110,32 +114,25 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.95f),
                             horizontalAlignment = Alignment.End
                         ) {
-                            Text(text = "Férias para Maldivas", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                            Text(text = viagem[0].descricao, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
                     }
                 }
-                item {
+                items(gastos.size) {
                     Column(
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
                         DescViagemComponent(
-                            id = 1,
-                            title = "Hotel",
-                            valor = "2000,00",
+                            id = gastos[it].id,
+                            title = gastos[it].descricao,
+                            valor = gastos[it].valor,
                             onItemClick = {}
                         )
-                        DescViagemComponent(
-                            id = 2,
-                            title = "Restaurante",
-                            valor = "150,00",
-                            onItemClick = {}
-                        )
-
                     }
                 }
                 item {
                     outLinedButtonComponent(
-                        onNavigationIconClick = { onNavCadastroViagens.invoke() },
+                        onNavigationIconClick = {  },
                         title = "ADICIONAR NOVO GASTO"
                     )
                     Spacer(modifier = Modifier.height(55.dp))
@@ -143,7 +140,7 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
 
                 item {
                     outLinedButtonComponent(
-                        onNavigationIconClick = { onNavCadastroViagens.invoke() },
+                        onNavigationIconClick = { },
                         title = "SALVAR"
                     )
 
@@ -158,7 +155,5 @@ fun DescViagens(onNavCadastroViagens: () -> Unit) {
 @Preview
 @Composable
 fun previewDescViagens() {
-    DescViagens {
-        {}
-    }
+    DescViagens()
 }
