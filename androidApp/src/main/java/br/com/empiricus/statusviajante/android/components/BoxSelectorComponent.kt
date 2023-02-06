@@ -44,6 +44,7 @@ fun boxSelector(
 
     Box {
         OutlinedTextField(
+            readOnly = true,
             value = selecionado.value,
             onValueChange = { selecionado.value = it },
             modifier = modifier
@@ -122,6 +123,7 @@ fun boxSelectorCalendar(
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
                 },
+            readOnly = true,
             value = selecionado.value,
             onValueChange = { selecionado.value = it },
             label = {
