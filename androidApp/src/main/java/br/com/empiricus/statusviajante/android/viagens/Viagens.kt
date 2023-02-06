@@ -77,7 +77,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit) {
                     ) {
                         listaViagemComponent(
                             id = 1,
-                            title = "Ferias",
+                            title = "Férias",
                             dataIda = "06/02/2023",
                             dataVolta = "15/02/2022",
                             onItemClick = {}
