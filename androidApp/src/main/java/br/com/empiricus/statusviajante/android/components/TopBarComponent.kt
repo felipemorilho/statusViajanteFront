@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun topBarComponent(
-    modifier: Modifier = Modifier,
-    onClickNav: () -> Unit = {}
+    modifier: Modifier = Modifier
 ){
     TopAppBar(
         modifier = modifier

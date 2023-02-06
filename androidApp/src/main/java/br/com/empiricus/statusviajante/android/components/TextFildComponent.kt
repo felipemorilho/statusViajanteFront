@@ -2,8 +2,6 @@ package br.com.empiricus.statusviajante.android.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -27,7 +25,8 @@ import androidx.compose.ui.unit.dp
 fun outLinedTextFildComponent(
     valor : MutableState<TextFieldValue>,
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text
 ){
     OutlinedTextField(
         modifier = modifier
@@ -44,7 +43,8 @@ fun outLinedTextFildComponent(
                 )
             )
         },
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,
@@ -54,11 +54,10 @@ fun outLinedTextFildComponent(
     )
 }
 
-
 @Composable
 fun outLinedTextFildPassword (
     valor : MutableState<TextFieldValue>,
-    nome : String,
+    title : String,
     modifier: Modifier = Modifier
 ) {
 
@@ -74,7 +73,7 @@ fun outLinedTextFildPassword (
         onValueChange = { valor.value = it },
         label = {
             Text(
-                text = nome,
+                text = title,
                 color = MaterialTheme.colors.secondary,
                 style = TextStyle(shadow = Shadow(color = MaterialTheme.colors.secondary))
             )
@@ -92,60 +91,12 @@ fun outLinedTextFildPassword (
                 )
             }
         },
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
+        shape = MaterialTheme.shapes.medium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colors.secondary,
             unfocusedBorderColor = MaterialTheme.colors.secondary,
             focusedLabelColor = MaterialTheme.colors.secondary,
             cursorColor = MaterialTheme.colors.secondary,
-
-            )
-    )
-
-}
-
-@Composable
-fun outLinedTextFildIcon(
-    valor : MutableState<TextFieldValue>,
-    title: String,
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    description: String,
-    onClick: () -> Unit
-){
-    OutlinedTextField(
-        modifier = modifier
-            .fillMaxWidth(0.8f)
-            .height(60.dp),
-        value = valor.value,
-        onValueChange = { valor.value = it },
-        trailingIcon = {
-            IconButton(
-                onClick = {onClick}
-            ){
-                Icon(
-                    imageVector = icon,
-                    contentDescription = description,
-                    tint = MaterialTheme.colors.primary
-                )
-            }
-        },
-        label = {
-            Text(
-                text = title,
-                color = MaterialTheme.colors.secondary,
-                style = TextStyle(
-                    shadow = Shadow(color = MaterialTheme.colors.secondary)
-                )
-            )
-        },
-        shape = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colors.secondary,
-            unfocusedBorderColor = MaterialTheme.colors.secondary,
-            focusedLabelColor = MaterialTheme.colors.secondary,
-            cursorColor = MaterialTheme.colors.secondary
         )
     )
 }
-

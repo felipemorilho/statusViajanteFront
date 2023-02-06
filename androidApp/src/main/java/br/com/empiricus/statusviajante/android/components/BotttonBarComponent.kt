@@ -12,11 +12,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun bottonBarComponent(
-    onBack: () -> Unit,
+    onBack: () -> Unit = {},
+    colorBackButton: Color = MaterialTheme.colors.secondaryVariant,
+    colorMenuButton: Color = MaterialTheme.colors.secondaryVariant,
     onNavDrawer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -33,14 +36,14 @@ fun bottonBarComponent(
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "botão de voltar",
-                    tint = MaterialTheme.colors.secondaryVariant
+                    tint = colorBackButton
                 )
             }
             IconButton(onClick = onNavDrawer){
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "botão menu",
-                    tint = MaterialTheme.colors.secondaryVariant
+                    tint = colorMenuButton
                 )
             }
         }

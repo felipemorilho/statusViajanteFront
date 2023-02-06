@@ -4,16 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,7 +17,7 @@ import br.com.empiricus.statusviajante.android.components.*
 import kotlinx.coroutines.launch
 
 @Composable
-fun cadastroViagens(onNavTest: () -> Unit) {
+fun cadastroViagens(onBack: () -> Boolean) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -32,10 +27,10 @@ fun cadastroViagens(onNavTest: () -> Unit) {
             scaffoldState = scaffoldState,
             topBar = {topBarComponent()},
             bottomBar = { bottonBarComponent(
-                onBack = {},
+                onBack = {onBack.invoke()},
                 onNavDrawer = {
                     scope.launch { scaffoldState.drawerState.open() }
-            }) },
+                }) },
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 drawerHeader()
@@ -81,7 +76,7 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                             horizontalAlignment = Alignment.Start
                         ) {
                             outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = origem,
                                 title = "Origem"
                             )
@@ -92,7 +87,7 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                             horizontalAlignment = Alignment.End
                         ) {
                             outLinedTextFildComponent(
-                                modifier = Modifier.fillMaxWidth(0.9f),
+                                modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = destino,
                                 title = "Destino"
                             )
@@ -101,13 +96,15 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                 }
 
                 item {
-                    val moedaCorrente = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildIcon(
-                        valor = moedaCorrente,
-                        title = "Moeda corrente",
-                        icon = Icons.Filled.ArrowDropDown,
-                        description = "seta para baixo",
-                        onClick = {}
+                    val selecionado: MutableState<String> = remember { mutableStateOf("") }
+                    val moedaCorrente = listOf(
+                        "Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen"
+                    )
+
+                    boxSelector(
+                        categorias = moedaCorrente,
+                        title = "Moeda Corrente",
+                        selecionado = selecionado
                     )
                 }
 
@@ -115,8 +112,8 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
-                        val dataInicio = remember { mutableStateOf(TextFieldValue()) }
-                        val dataFinal = remember { mutableStateOf(TextFieldValue()) }
+                        val dataInicio: MutableState<String> = remember { mutableStateOf("") }
+                        val dataFinal : MutableState<String> = remember { mutableStateOf("") }
                         val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
                         val orcamentoDiario = remember { mutableStateOf(TextFieldValue()) }
 
@@ -124,19 +121,17 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.5f),
                             horizontalAlignment = Alignment.Start
                         ) {
-                            outLinedTextFildIcon(
+                            boxSelectorCalendar(
                                 modifier = Modifier.fillMaxWidth(0.95f),
-                                valor = dataInicio,
                                 title = "Data inicio",
-                                icon = Icons.Filled.CalendarMonth,
-                                description = "Calendario do mes",
-                                onClick = {}
+                                selecionado = dataInicio
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(
                                 modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = orcamentoTotal,
-                                title = "Orçamento total"
+                                title = "Orçamento total",
+                                keyboardType = KeyboardType.Number
                             )
                         }
 
@@ -144,26 +139,29 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.End
                         ) {
-                            outLinedTextFildIcon(
+                            boxSelectorCalendar(
                                 modifier = Modifier.fillMaxWidth(0.95f),
-                                valor = dataFinal,
                                 title = "Data final",
-                                icon = Icons.Filled.CalendarMonth,
-                                description = "Calendario do mes",
-                                onClick = {}
+                                selecionado = dataFinal
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(
                                 modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = orcamentoDiario,
-                                title = "Orçamento diario"
+                                title = "Orçamento diario",
+                                keyboardType = KeyboardType.Number
                             )
                         }
                     }
                 }
+
                 item {
                     val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
-                    outLinedTextFildComponent(valor = quantidadeVianjantes, title = "Quantidade de viajantes no grupo")
+                    outLinedTextFildComponent(
+                        valor = quantidadeVianjantes,
+                        title = "Quantidade de viajantes no grupo",
+                        keyboardType = KeyboardType.Number
+                    )
                 }
 
                 item {
@@ -172,7 +170,7 @@ fun cadastroViagens(onNavTest: () -> Unit) {
                 }
 
                 item {
-                    outLinedButtonComponent(onNavigationIconClick = {onNavTest.invoke()}, title = "Cadastrar viagem")
+                    outLinedButtonComponent(onNavigationIconClick = {}, title = "Cadastrar viagem")
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             }
@@ -184,5 +182,5 @@ fun cadastroViagens(onNavTest: () -> Unit) {
 @Preview
 @Composable
 fun previewCadastroV(){
-    cadastroViagens(onNavTest = {})
+    cadastroViagens(onBack = {true})
 }
