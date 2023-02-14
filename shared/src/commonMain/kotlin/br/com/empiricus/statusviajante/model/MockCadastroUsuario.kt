@@ -11,6 +11,7 @@ object MockCadastroUsuario {
            mutableListOf(
                CadastroUsuario(
                    "Felipe Morilho",
+                   "Falipe123",
                    "felipe@gmail.com",
                    "Qwerty123#",
                    "1989-11-7",

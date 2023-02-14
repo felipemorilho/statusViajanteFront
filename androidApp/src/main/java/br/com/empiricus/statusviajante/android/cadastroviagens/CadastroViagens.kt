@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
 import kotlinx.coroutines.launch
@@ -21,6 +22,20 @@ fun cadastroViagens(onBack: () -> Boolean) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
+
+    val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
+    val origem = remember { mutableStateOf(TextFieldValue()) }
+    val destino = remember { mutableStateOf(TextFieldValue()) }
+    val selecionado: MutableState<String> = remember { mutableStateOf("") }
+    val moedaCorrente = listOf("Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen")
+    val dataInicio: MutableState<String> = remember { mutableStateOf("") }
+    val dataFinal : MutableState<String> = remember { mutableStateOf("") }
+    val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
+    val orcamentoDiario = remember { mutableStateOf(TextFieldValue()) }
+    val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
+    val descricao = remember { mutableStateOf(TextFieldValue()) }
+
+
 
     MyApplicationTheme {
         Scaffold(
@@ -47,12 +62,14 @@ fun cadastroViagens(onBack: () -> Boolean) {
         ){
             LazyColumn(
                 modifier = Modifier
-                    .background(brush = Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colors.secondaryVariant,
-                            MaterialTheme.colors.primaryVariant
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colors.secondaryVariant,
+                                MaterialTheme.colors.primaryVariant
+                            )
                         )
-                    ))
+                    )
                     .fillMaxSize()
                     .padding(it),
                 verticalArrangement = Arrangement.spacedBy(25.dp),
@@ -60,7 +77,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
             ){
                 item {
                     Spacer(modifier = Modifier.height(35.dp))
-                    val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = nomeViagem, title = "Nome da viagem")
                 }
 
@@ -68,8 +84,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
-                        val origem = remember { mutableStateOf(TextFieldValue()) }
-                        val destino = remember { mutableStateOf(TextFieldValue()) }
 
                         Column(
                             modifier = Modifier.fillMaxWidth(0.5f),
@@ -96,11 +110,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    val selecionado: MutableState<String> = remember { mutableStateOf("") }
-                    val moedaCorrente = listOf(
-                        "Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen"
-                    )
-
                     boxSelector(
                         categorias = moedaCorrente,
                         title = "Moeda Corrente",
@@ -112,11 +121,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
-                        val dataInicio: MutableState<String> = remember { mutableStateOf("") }
-                        val dataFinal : MutableState<String> = remember { mutableStateOf("") }
-                        val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
-                        val orcamentoDiario = remember { mutableStateOf(TextFieldValue()) }
-
                         Column(
                             modifier = Modifier.fillMaxWidth(0.5f),
                             horizontalAlignment = Alignment.Start
@@ -156,7 +160,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(
                         valor = quantidadeVianjantes,
                         title = "Quantidade de viajantes no grupo",
@@ -165,7 +168,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    val descricao = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = descricao, title = "Descrição")
                 }
 
