@@ -53,6 +53,8 @@ Acesse o repositório com a nossa [API](https://github.com/felipemorilho/StatusV
 - Discord
 - Slack
 - Trello
+- Jetpack Compose
+- KMM
 
 # Desenvolvedores
 ______________
