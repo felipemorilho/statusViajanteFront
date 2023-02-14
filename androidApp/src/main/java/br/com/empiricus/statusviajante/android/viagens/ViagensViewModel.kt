@@ -36,5 +36,21 @@ class ViagensViewModel(
         }
     }
 
+    fun postViagem(viagem: Viagem) = viewModelScope.launch {
+        viagensRepository.postViagem(viagem).collectLatest {
+            _viagem.value = it
+        }
+    }
+      fun putViagem(viagem: Viagem) = viewModelScope.launch {
+        viagensRepository.putViagem(viagem).collectLatest {
+            _viagem.value = it
+        }
+    }
+      fun deleteViagem(viagemId: Long) = viewModelScope.launch {
+        viagensRepository.deleteViagem(viagemId).collectLatest {
+        }
+    }
+
+
 
 }

@@ -26,7 +26,21 @@ class ViagensRepository(
 
     suspend fun getViagemById(id: Long) = flow<DataResult<Viagem>> {
         val chamada = api.getViagemById(id)
+        emit(DataResult.Success(chamada))
+    }
 
+    suspend fun postViagem(viagem: Viagem) = flow<DataResult<Viagem>> {
+        val chamada = api.postViagem(viagem)
+        emit(DataResult.Success(chamada))
+    }
+
+    suspend fun putViagem(viagem: Viagem) = flow<DataResult<Viagem>> {
+        val chamada = api.putViagem(viagem)
+        emit(DataResult.Success(chamada))
+    }
+
+    suspend fun deleteViagem(id: Long) = flow<DataResult<*>> {
+        val chamada = api.deleteViagem(id)
         emit(DataResult.Success(chamada))
     }
 
