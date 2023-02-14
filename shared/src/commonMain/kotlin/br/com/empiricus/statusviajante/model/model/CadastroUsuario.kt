@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CadastroUsuario(
     val nome: String,
+    val nomeUsuario: String,
     val email: String,
     val senha: String,
     @Serializable(with = DateSerialize::class)

@@ -44,9 +44,9 @@ fun navigator(
            )
         }
         composable(Route.Cadastro.name){
-            cadastroUsuario{
-                navHostController.popBackStack()
-            }
+            cadastroUsuario(
+                onBack = { navHostController.popBackStack() }
+            )
         }
         composable(Route.HomeViagens.name){
             Viagens(

@@ -18,6 +18,8 @@ data class Viagem(
     val orcamentoDiario: Double,
     val quantidadeViajantes: Int,
     val descricao: String
-){
+)
 
-}
+data class ViagensResponse(
+    val viagens: List<Viagem>
+)
