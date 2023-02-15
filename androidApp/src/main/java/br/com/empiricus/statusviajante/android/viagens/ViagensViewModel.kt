@@ -14,11 +14,11 @@ class ViagensViewModel(
     val viagensRepository: ViagensRepository = ViagensRepository.instance
 ): ViewModel() {
 
-    private val _viagens = MutableStateFlow<DataResult<List<Viagem>>>(DataResult.Empty)
-    val viagens: StateFlow<DataResult<List<Viagem>>> = _viagens
+    private val _viagensState = MutableStateFlow<DataResult<List<Viagem>>>(DataResult.Empty)
+    val viagensState: StateFlow<DataResult<List<Viagem>>> = _viagensState
 
-    private val _viagem = MutableStateFlow<DataResult<Viagem>>(DataResult.Empty)
-    val viagem: StateFlow<DataResult<Viagem>> = _viagem
+    private val _viagemState = MutableStateFlow<DataResult<Viagem>>(DataResult.Empty)
+    val viagemState: StateFlow<DataResult<Viagem>> = _viagemState
 
     init {
         getViagens()
@@ -26,27 +26,51 @@ class ViagensViewModel(
 
     fun getViagens() = viewModelScope.launch {
         viagensRepository.getViagens().collectLatest {
-            _viagens.value = it
+            _viagensState.value = it
         }
     }
 
     fun getViagensById(id: Long) = viewModelScope.launch {
         viagensRepository.getViagemById(id).collectLatest {
-            _viagem.value = it
+            _viagemState.value = it
         }
     }
 
     fun postViagem(viagem: Viagem) = viewModelScope.launch {
-        viagensRepository.postViagem(viagem).collectLatest {
-            _viagem.value = it
+        val viagemCadastro = Viagem(
+            nome = viagem.nome,
+            origem = viagem.origem,
+            destino = viagem.destino,
+            dataInicio = viagem.dataInicio,
+            dataFinal = viagem.dataFinal,
+            orcamentoTotal = viagem.orcamentoTotal,
+            orcamentoDiario = viagem.orcamentoDiario,
+            quantidadeViajantes = viagem.quantidadeViajantes,
+            descricao = viagem.descricao
+        )
+
+        viagensRepository.postViagem(viagemCadastro).collectLatest {
+            _viagemState.value = it
         }
     }
       fun putViagem(viagem: Viagem) = viewModelScope.launch {
-        viagensRepository.putViagem(viagem).collectLatest {
-            _viagem.value = it
+          val viagemAtualizacao = Viagem(
+              nome = viagem.nome,
+              origem = viagem.origem,
+              destino = viagem.destino,
+              dataInicio = viagem.dataInicio,
+              dataFinal = viagem.dataFinal,
+              orcamentoTotal = viagem.orcamentoTotal,
+              orcamentoDiario = viagem.orcamentoDiario,
+              quantidadeViajantes = viagem.quantidadeViajantes,
+              descricao = viagem.descricao
+          )
+        viagensRepository.putViagem(viagemAtualizacao).collectLatest {
+            _viagemState.value = it
         }
     }
-      fun deleteViagem(viagemId: Long) = viewModelScope.launch {
+      fun deleteViagem(viagem: Viagem) = viewModelScope.launch {
+          val viagemId = viagem.id
         viagensRepository.deleteViagem(viagemId).collectLatest {
         }
     }

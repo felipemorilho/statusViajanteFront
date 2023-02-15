@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
+import br.com.empiricus.statusviajante.android.viagens.ViagensViewModel
+import br.com.empiricus.statusviajante.model.model.Viagem
 import kotlinx.coroutines.launch
 
 @Composable
@@ -22,6 +24,8 @@ fun cadastroViagens(onBack: () -> Boolean) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
+    val viewModel: ViagensViewModel = viewModel()
+    val viagemState by viewModel.viagemState.collectAsState()
 
     val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
     val origem = remember { mutableStateOf(TextFieldValue()) }
@@ -172,7 +176,19 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    outLinedButtonComponent(onNavigationIconClick = {}, title = "Cadastrar viagem")
+                    outLinedButtonComponent(
+                        onNavigationIconClick = {viewModel.postViagem(viagem = Viagem(
+                            nome = nomeViagem.value.text,
+                            origem = origem.value.text,
+                            destino = destino.value.text,
+                            dataInicio = dataInicio.value,
+                            dataFinal = dataFinal.value,
+                            orcamentoTotal = orcamentoTotal.value.text.toDouble(),
+                            orcamentoDiario =orcamentoDiario.value.text.toDouble(),
+                            quantidadeViajantes = quantidadeVianjantes.value.text.toInt(),
+                            descricao = descricao.value.text
+                        ))},
+                        title = "Cadastrar viagem")
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             }
