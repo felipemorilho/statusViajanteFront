@@ -54,6 +54,7 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(it)
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -81,10 +82,6 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                             Icon(imageVector = Icons.Filled.Delete, contentDescription = "botão deletar")
                         }
                     }
-
-
-                    
-
 
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f),
@@ -130,8 +127,8 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(0.65f)
-                        .padding(it),
-                    verticalArrangement = Arrangement.spacedBy(25.dp),
+                        .padding(bottom = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     val gastos = MockGastoViagem.gastos
@@ -151,14 +148,13 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                 }
                 Column(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     outLinedButtonComponent(
                         onNavigationIconClick = { onNavNovoGasto.invoke() },
                         title = "ADICIONAR NOVO GASTO"
                     )
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     outLinedButtonComponent(
                         onNavigationIconClick = { },
