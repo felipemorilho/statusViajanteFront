@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GastoViagem (
-    val id: Long,
+    val id: Long = 0,
     @Serializable(with = DateSerialize::class)
     val dataGasto: String,
     val categoria: Categoria,
@@ -21,3 +21,7 @@ data class GastoViagem (
         OUTROS("Outros")
     }
 }
+data class GastosResponse(
+    val gastosViagem: List<GastoViagem>
+)
+
