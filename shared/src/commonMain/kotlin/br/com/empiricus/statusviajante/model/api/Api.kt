@@ -27,7 +27,7 @@ class Api {
         defaultRequest {
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
-            header(Authorization, "Basic $token")
+            header(Authorization,"$token")
         }
     }
 
