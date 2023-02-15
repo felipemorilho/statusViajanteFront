@@ -1,21 +1,21 @@
 package br.com.empiricus.statusviajante.android.gastoViagem
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.model.model.GastoViagem
 import br.com.empiricus.statusviajante.model.repository.GastosViagemRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class GastosViagemViewModel(
-    val gastosViagemRepository: GastosViagemRepository.instance
+    val gastosViagemRepository: GastosViagemRepository = GastosViagemRepository.instance
 ) : ViewModel() {
 
-    private val _gastosViagemState = mutableStateOf<DataResult<List<GastoViagem>>>(DataResult.Empty)
-    val gastosViagemState: StateFlow<DataResult<List<GastoViagem>>> = _gastosViagemState
+    private val _gastosViagemState: MutableStateFlow<DataResult<GastoViagem>> = MutableStateFlow(DataResult.Empty)
+    val gastosViagemState: StateFlow<DataResult<GastoViagem>> = _gastosViagemState
 
     init {
         getGastosViagem()
@@ -35,13 +35,13 @@ class GastosViagemViewModel(
 
     fun postGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
         val gastoViagemCadastro: GastoViagem(
-        dataGasto = GastoViagem.dataGasto,
-        categoria = GastoViagem.categoria,
-        valor = GastoViagem.valor,
+        dataGasto = GastoViagem.dataGasto;
+        categoria = GastoViagem.categoria;
+        valor = GastoViagem.valor;
         descricao = GastoViagem.descricao
         )
 
-        gastosViagemRepository.postGastos(gastosViagemCadastro).collectLateste {
+        gastosViagemRepository.postGastos(gastoViagemCadastro).collectLateste {
             _gastosViagemState.value = it
         }
     }
@@ -60,7 +60,7 @@ class GastosViagemViewModel(
     }
 
     fun deleteGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
-        val gastosId = GastoViagem.id
+        val gastosId = GastoViagem.
         gastosViagemRepository.deleteGastos(gastosId).collectLastest {
         }
     }
