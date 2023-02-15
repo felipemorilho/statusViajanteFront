@@ -8,60 +8,64 @@ import br.com.empiricus.statusviajante.model.model.GastoViagem
 import br.com.empiricus.statusviajante.model.repository.GastosViagemRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class GastosViagemViewModel(
     val gastosViagemRepository: GastosViagemRepository = GastosViagemRepository.instance
 ) : ViewModel() {
 
-    private val _gastosViagemState: MutableStateFlow<DataResult<GastoViagem>> = MutableStateFlow(DataResult.Empty)
-    val gastosViagemState: StateFlow<DataResult<GastoViagem>> = _gastosViagemState
+    private val _gastoViagemState: MutableStateFlow<DataResult<GastoViagem>> = MutableStateFlow(DataResult.Empty)
+    val gastoViagemState: StateFlow<DataResult<GastoViagem>> = _gastoViagemState
+
+    private val _gastosViagemState: MutableStateFlow<DataResult<List<GastoViagem>>> = MutableStateFlow(DataResult.Empty)
+    val gastosViagemState: StateFlow<DataResult<List<GastoViagem>>> = _gastosViagemState
 
     init {
         getGastosViagem()
     }
 
     fun getGastosViagem() = viewModelScope.launch {
-        gastosViagemRepository.getGastosViagem().collectLastest {
+        gastosViagemRepository.getGastos().collectLatest {
             _gastosViagemState.value = it
         }
     }
 
     fun getGastosById(id: Long) = viewModelScope.launch {
-        gastosViagemRepository.getGastosById(id).collectLastest {
-            _gastosViagemState.value = it
+        gastosViagemRepository.getGastosById(id).collectLatest {
+            _gastoViagemState.value = it
         }
     }
 
     fun postGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
-        val gastoViagemCadastro: GastoViagem(
-        dataGasto = GastoViagem.dataGasto;
-        categoria = GastoViagem.categoria;
-        valor = GastoViagem.valor;
-        descricao = GastoViagem.descricao
+        val gastoViagemCadastro = GastoViagem(
+            dataGasto = gastoViagem.dataGasto,
+            categoria = gastoViagem.categoria,
+            valor = gastoViagem.valor,
+            descricao = gastoViagem.descricao
         )
 
-        gastosViagemRepository.postGastos(gastoViagemCadastro).collectLateste {
-            _gastosViagemState.value = it
+        gastosViagemRepository.postGastos(gastoViagemCadastro).collectLatest {
+            _gastoViagemState.value = it
         }
     }
 
     fun putGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
-        val gastoViagemoAtualizacao: GastoViagem(
-        dataGasto = GastoViagem.dataGasto,
-        categoria = GastoViagem.categoria,
-        valor = GastoViagem.valor,
-        descricao = GastoViagem.descricao
+        val gastoViagemoAtualizacao= GastoViagem(
+            dataGasto = gastoViagem.dataGasto,
+            categoria = gastoViagem.categoria,
+            valor = gastoViagem.valor,
+            descricao = gastoViagem.descricao
         )
 
-        gastosViagemRepository.putGastos(gastosViagemCadastro).collectLateste {
-            _gastosViagemState.value = it
+        gastosViagemRepository.putGastos(gastoViagemoAtualizacao).collectLatest {
+            _gastoViagemState.value = it
         }
     }
 
     fun deleteGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
-        val gastosId = GastoViagem.
-        gastosViagemRepository.deleteGastos(gastosId).collectLastest {
+        val gastosId = gastoViagem.id
+        gastosViagemRepository.deleteGastos(gastosId).collectLatest {
         }
     }
 

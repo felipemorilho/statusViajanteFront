@@ -22,13 +22,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
+import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
 import br.com.empiricus.statusviajante.model.model.Viagem
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
+fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDetail: (Long) -> Unit,) {
 
     val scope = rememberCoroutineScope()
     val viewModel: ViagensViewModel = viewModel()
@@ -82,7 +83,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                         ErrorMessage((viagensState as DataResult.Error).error)
                     }
                     is DataResult.Success -> {
-                        ContenteViagens(viagensState as DataResult.Success<List<Viagem>>, onClicked =  { onNavViagem.invoke() })
+                        ContenteViagens(viagensState as DataResult.Success<List<Viagem>>, onItemDetail =  { onItemDetail })
                     }
                     else -> {}
                 }
@@ -106,7 +107,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
 @Composable
 fun ContenteViagens(
     retorno: DataResult.Success<List<Viagem>>,
-    onClicked: ()-> Unit
+    onItemDetail: () -> Unit
 ){
     val viagens = retorno.data
 
@@ -120,7 +121,7 @@ fun ContenteViagens(
 
         items(viagens.size){
             listaViagemComponent(
-                onItemClick = onClicked,
+                onItemClick = { onItemDetail.invoke() },
                 id = viagens[it].id,
                 title = viagens[it].nome,
                 dataIda = viagens[it].dataInicio,
@@ -135,5 +136,5 @@ fun ContenteViagens(
 @Preview
 @Composable
 fun previewViagens() {
-    Viagens({},{})
+    Viagens({}, {}, {})
 }

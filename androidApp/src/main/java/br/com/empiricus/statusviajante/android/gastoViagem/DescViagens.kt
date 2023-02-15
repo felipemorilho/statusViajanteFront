@@ -7,6 +7,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
 import br.com.empiricus.statusviajante.model.MockGastoViagem
@@ -24,9 +28,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
+
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+    val viewModel: ViagensViewModel = viewModel()
+    val viagemState by viewModel.viagemState.collectAsState()
+
     MyApplicationTheme {
-        val scope = rememberCoroutineScope()
-        val scaffoldState = rememberScaffoldState()
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = { topBarComponent() },
@@ -42,11 +50,7 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                 drawerHeader()
                 drawerBody(
                     itens = listaItensDrawer(),
-                    onItemClick = {
-                        when (it.id) {
-
-                        }
-                    }
+                    onItemClick = {}
                 )
             }
 
@@ -78,8 +82,17 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = viagem[0].nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {
+
+                        }) {
                             Icon(imageVector = Icons.Filled.Delete, contentDescription = "botão deletar")
+                        }
+
+                        when(viagemState) {
+                            is DataResult.Loading -> CircularProgressIndicator()
+                            is DataResult.Error -> ErrorMessage((viagemState as DataResult.Error).error)
+                            is DataResult.Success ->((viagemState as DataResult.Success))
+                            else -> {}
                         }
                     }
 

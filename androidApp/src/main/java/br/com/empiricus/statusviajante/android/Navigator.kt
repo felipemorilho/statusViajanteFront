@@ -51,13 +51,17 @@ fun navigator(
         composable(Route.HomeViagens.name){
             Viagens(
                 onNavCadastroViagens = {navHostController.navigate(Route.CadastroViagens.name)},
-                onNavViagem = {navHostController.navigate(Route.DetalheViagem.name)}
+                onNavViagem = {navHostController.navigate(Route.DetalheViagem.name)},
+                onItemDetail = { params ->
+                    navHostController.navigate("${Route.DetalheViagem}/$params")
+                }
             )
         }
         composable(Route.DetalheViagem.name){
             DescViagens(
                 onNavNovoGasto = { navHostController.navigate(Route.NovoGastoViagem.name) },
-                onBack = { navHostController.popBackStack() }
+                onBack = { navHostController.popBackStack() },
+
             )
         }
         composable(Route.NovoGastoViagem.name){
