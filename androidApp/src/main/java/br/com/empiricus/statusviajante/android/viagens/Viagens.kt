@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
+import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
-import br.com.empiricus.statusviajante.model.MockListaViagens
 import br.com.empiricus.statusviajante.model.model.Viagem
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
+fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDetail: (Long) -> Unit,) {
 
     val scope = rememberCoroutineScope()
     val viewModel: ViagensViewModel = viewModel()
@@ -37,7 +37,6 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
 
 
     MyApplicationTheme {
-        val scope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState()
         Scaffold(
             scaffoldState = scaffoldState,
@@ -52,11 +51,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                 drawerHeader()
                 drawerBody(
                     itens = listaItensDrawer(),
-                    onItemClick = {
-                        when(it.id) {
-
-                        }
-                    }
+                    onItemClick = {}
                 )
             }
 
@@ -81,9 +76,15 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                 Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
 
                 when(viagensState){
-                    is DataResult.Loading -> LoadingIndicator()
-                    is DataResult.Error -> ErrorMessage((viagensState as DataResult.Error).error)
-                    is DataResult.Success -> contenteViagens(viagensState as DataResult.Success<List<Viagem>>, {})
+                    is DataResult.Loading -> {
+                        LoadingIndicator()
+                    }
+                    is DataResult.Error -> {
+                        ErrorMessage((viagensState as DataResult.Error).error)
+                    }
+                    is DataResult.Success -> {
+                        ContenteViagens(viagensState as DataResult.Success<List<Viagem>>, onItemDetail =  { onItemDetail })
+                    }
                     else -> {}
                 }
 
@@ -104,9 +105,9 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
 }
 
 @Composable
-fun contenteViagens(
+fun ContenteViagens(
     retorno: DataResult.Success<List<Viagem>>,
-    onClicked: ()-> Unit
+    onItemDetail: () -> Unit
 ){
     val viagens = retorno.data
 
@@ -120,7 +121,7 @@ fun contenteViagens(
 
         items(viagens.size){
             listaViagemComponent(
-                onItemClick = onClicked,
+                onItemClick = { onItemDetail.invoke() },
                 id = viagens[it].id,
                 title = viagens[it].nome,
                 dataIda = viagens[it].dataInicio,
@@ -135,5 +136,5 @@ fun contenteViagens(
 @Preview
 @Composable
 fun previewViagens() {
-    Viagens({},{})
+    Viagens({}, {}, {})
 }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ViagensViewModel(
-    val viagensRepository: ViagensRepository = ViagensRepository.instance
+    private val viagensRepository: ViagensRepository = ViagensRepository.instance
 ): ViewModel() {
 
     private val _viagensState = MutableStateFlow<DataResult<List<Viagem>>>(DataResult.Empty)
