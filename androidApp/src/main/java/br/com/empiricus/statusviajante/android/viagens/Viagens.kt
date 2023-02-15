@@ -8,6 +8,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,14 +19,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
 import br.com.empiricus.statusviajante.model.MockListaViagens
+import br.com.empiricus.statusviajante.model.model.Viagem
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
+
+    val scope = rememberCoroutineScope()
+    val viewModel: ViagensViewModel = viewModel()
+    val viagensState by viewModel.viagensState.collectAsState()
+
+
     MyApplicationTheme {
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberScaffoldState()
@@ -49,12 +60,13 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                 )
             }
 
-        ) {it ->
+        ) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(it)
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -64,30 +76,17 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
                         )
                     )
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .fillMaxHeight(0.65f)
-                        .padding(it),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
 
-                    item {
-                        Spacer(modifier = Modifier.height(25.dp))
-                        Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                    }
-                    val viagens = MockListaViagens.listaViagem
-                    items(viagens.size){
-                        listaViagemComponent(
-                            onItemClick = { onNavViagem.invoke() },
-                            id = viagens[it].id,
-                            title = viagens[it].nome,
-                            dataIda = viagens[it].dataInicio,
-                            dataVolta = viagens[it].dataFinal
-                        )
-                    }
+                Spacer(modifier = Modifier.height(25.dp))
+                Text(text = "SUAS VIAGENS", fontWeight = FontWeight.Bold, fontSize = 22.sp)
+
+                when(viagensState){
+                    is DataResult.Loading -> LoadingIndicator()
+                    is DataResult.Error -> ErrorMessage((viagensState as DataResult.Error).error)
+                    is DataResult.Success -> contenteViagens(viagensState as DataResult.Success<List<Viagem>>, {})
+                    else -> {}
                 }
+
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -102,6 +101,34 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun contenteViagens(
+    retorno: DataResult.Success<List<Viagem>>,
+    onClicked: ()-> Unit
+){
+    val viagens = retorno.data
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth(0.8f)
+            .fillMaxHeight(0.65f),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        items(viagens.size){
+            listaViagemComponent(
+                onItemClick = onClicked,
+                id = viagens[it].id,
+                title = viagens[it].nome,
+                dataIda = viagens[it].dataInicio,
+                dataVolta = viagens[it].dataFinal
+            )
+        }
+    }
+
 }
 
 

@@ -24,10 +24,6 @@ class Api {
                 }
             )
         }
-        install(Logging){
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
         defaultRequest {
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
@@ -36,7 +32,7 @@ class Api {
     }
     //============================ Login ===================================
     suspend fun login(login: Login): ProfileToken {
-        return httpClient.post("$DEFAULT_URL/usuarios/login") {
+        return httpClient.post("$DEFAULT_URL/usuarios/logar") {
             setBody(login)
         }.body()
     }

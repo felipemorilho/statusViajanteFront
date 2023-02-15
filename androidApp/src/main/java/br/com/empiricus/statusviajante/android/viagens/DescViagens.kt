@@ -138,7 +138,7 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
 
                     items(gastos.size) {
                         Column(
-                            modifier = Modifier.fillMaxWidth(0.8f)
+                            modifier = Modifier.fillMaxWidth(0.65f)
                         ) {
                             DescViagemComponent(
                                 id = gastos[it].id,
