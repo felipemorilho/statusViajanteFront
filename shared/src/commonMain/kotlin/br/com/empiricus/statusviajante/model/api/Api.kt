@@ -5,8 +5,10 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.http.HttpHeaders.Authorization
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
@@ -25,12 +27,12 @@ class Api {
         defaultRequest {
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
-            header("Authorization", "Basic $token")
+            header(Authorization, "Basic $token")
         }
     }
     //============================ Login ===================================
     suspend fun login(login: Login): ProfileToken {
-        return httpClient.post("$DEFAULT_URL/login") {
+        return httpClient.post("$DEFAULT_URL/usuarios/logar") {
             setBody(login)
         }.body()
     }
@@ -74,7 +76,7 @@ class Api {
     @ThreadLocal
     companion object {
         val instance by lazy { Api() }
-        var token = ""
+        var token: String = ""
         const val DEFAULT_URL = "http://statusviajante-env.eba-nvmskkkr.us-east-1.elasticbeanstalk.com"
     }
 

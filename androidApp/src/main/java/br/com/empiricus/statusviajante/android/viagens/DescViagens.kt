@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -69,8 +71,20 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                     val gastosTotais = MockGastoViagem.gastosTotais
                     val viagem = MockListaViagens.listaViagem
 
-                    Spacer(modifier = Modifier.height(25.dp))
-                    Text(text = viagem[0].nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = viagem[0].nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                        IconButton(onClick = {}) {
+                            Icon(imageVector = Icons.Filled.Delete, contentDescription = "botão deletar")
+                        }
+                    }
+
+
+                    
+
 
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f),
@@ -124,7 +138,7 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
 
                     items(gastos.size) {
                         Column(
-                            modifier = Modifier.fillMaxWidth(0.8f)
+                            modifier = Modifier.fillMaxWidth(0.65f)
                         ) {
                             DescViagemComponent(
                                 id = gastos[it].id,
