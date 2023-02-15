@@ -16,7 +16,7 @@ import kotlin.native.concurrent.ThreadLocal
 class Api {
 
     private val httpClient = HttpClient {
-        install(ContentNegotiation){
+        install(ContentNegotiation) {
             json(
                 Json {
                     ignoreUnknownKeys = true
@@ -30,6 +30,7 @@ class Api {
             header(Authorization, "Basic $token")
         }
     }
+
     //============================ Login ===================================
     suspend fun login(login: Login): ProfileToken {
         return httpClient.post("$DEFAULT_URL/usuarios/logar") {
@@ -65,19 +66,37 @@ class Api {
         }.body()
     }
 
-    suspend fun deleteViagem(id: Long){
+    suspend fun deleteViagem(id: Long) {
         return httpClient.delete("$DEFAULT_URL/viagens/${id}").body()
     }
 
     //============================ Gastos ==================================
+    suspend fun getAllGastos(): GastosResponse {
+        return httpClient.get("$DEFAULT_URL/gasto_viagem").body()
+    }
 
+    suspend fun getGastosById(id: Long): GastoViagem {
+        return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
+    }
 
+    suspend fun postGastos(gastoViagem: GastoViagem): GastoViagem {
+        return httpClient.post("$DEFAULT_URL/gasto_viagem").body()
+    }
+
+    suspend fun putGastos(gastoViagem: GastoViagem): GastoViagem {
+        return httpClient.put("$DEFAULT_URL/gasto_viagem").body()
+    }
+
+    suspend fun  deleteGastos(id: Long): GastoViagem {
+        return httpClient.delete("$DEFAULT_URL/gastos/${id}").body()
+    }
 
     @ThreadLocal
     companion object {
         val instance by lazy { Api() }
         var token: String = ""
-        const val DEFAULT_URL = "http://statusviajante-env.eba-nvmskkkr.us-east-1.elasticbeanstalk.com"
+        const val DEFAULT_URL =
+            "http://statusviajante-env.eba-nvmskkkr.us-east-1.elasticbeanstalk.com"
     }
 
 }
