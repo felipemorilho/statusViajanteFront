@@ -60,7 +60,7 @@ fun DescViagemComponent(
                                 text = "R$ $valor",
                                 color = MaterialTheme.colors.primary,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
+                                fontSize = 17.sp
                             )
 
                         }
