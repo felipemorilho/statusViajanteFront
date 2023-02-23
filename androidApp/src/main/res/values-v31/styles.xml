@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">
+            @color/padraoApp
+        </item>
+        <item name="android:windowSplashScreenAnimatedIcon">
+            @drawable/logocircular
+        </item>
+        <item name="android:windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
+    </style>
+</resources>
