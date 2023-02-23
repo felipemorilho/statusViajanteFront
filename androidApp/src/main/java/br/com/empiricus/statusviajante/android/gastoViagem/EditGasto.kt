@@ -26,6 +26,7 @@ import br.com.empiricus.statusviajante.integration.model.GastoViagem
 import br.com.empiricus.statusviajante.integration.model.Viagem
 
 import kotlinx.coroutines.launch
+import br.com.empiricus.statusviajante.android.components.DescViagemComponent as DescViagemComponent
 
 @Composable
 fun EditGasto(id: String, onBack: () -> Boolean) {
@@ -86,35 +87,7 @@ fun EditGasto(id: String, onBack: () -> Boolean) {
                     else -> {}
                 }
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-//                    outLinedButtonComponent(onNavigationIconClick = {
-//                        viewModel.postGastos(
-//                            gastoViagem = GastoViagem(
-//                                dataGasto = dataGasto.value,
-//                                categoria = categoriaSelecionada.value,
-//                                valorGasto = valorGasto.value.text.toDouble(),
-//                                moeda = moedaSelecionada.value,
-//                                descricaoGasto = descricaoGasto.value.text
-//                            ),
-//                            id = id
-//                        )
-//                    }, title = "Cadastrar Gasto")
-                    outLinedButtonComponent(onNavigationIconClick = {
-                        gastosViewModel.putGastos(
-                            gastoViagem = GastoViagem(
-                                dataGasto = dataGasto.toString(),
-                                categoria = categoria.toString(),
-                                moeda = moeda.toString(),
-                                valorGasto = valorGasto.value.toString().toDouble(),
-                                descricaoGasto = descricaoGasto.toString()
-                            )
-                        )},
-                        title = "Editar Gasto")
-                    Spacer(modifier = Modifier.height(25.dp))
-                }
+
             }
 
         }
@@ -128,107 +101,133 @@ fun contentEditGasto (
 
     val gasto = retorno.data
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(0.8f),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "Editar Gasto", fontWeight = FontWeight.Bold, fontSize = 22.sp)
+            Row(
+                modifier = Modifier.fillMaxWidth(0.8f),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Editar Gasto", fontWeight = FontWeight.Bold, fontSize = 22.sp)
+            }
+
         }
 
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+
+            Spacer(modifier = Modifier.height(60.dp))
+            Text(text = "Editar Gasto", fontWeight = FontWeight.Bold, fontSize = 32.sp)
+        }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = gasto.valorGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+            Column(
+                modifier = Modifier.fillMaxWidth(0.95f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(text = gasto.valorGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = gasto.moeda, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        val moedaSelecionada: MutableState<String> = remember { mutableStateOf("") }
+        val moedas = listOf("Real", "Dollar", "Euro", "Libra", "Peso")
+
+            Column(
+                modifier = Modifier.fillMaxWidth(0.95f),
+                horizontalAlignment = Alignment.End
+            ) {
+                boxSelector(categorias = moedas, title = "Moeda", selecionado = moedaSelecionada)
+            }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = gasto.categoria, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        val categoriaSelecionada: MutableState<String> = remember { mutableStateOf("") }
+        val categorias = listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
+
+        Column(
+            modifier = Modifier.fillMaxWidth(0.95f),
+            horizontalAlignment = Alignment.End
+        ) {
+            boxSelector(categorias = categorias, title = "Categoria", selecionado = categoriaSelecionada)
+        }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = gasto.dataGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(0.95f),
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(text = gasto.dataGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        Row (
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = gasto.descricaoGasto, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(0.95f),
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(text = gasto.descricaoGasto, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+    //                    outLinedButtonComponent(onNavigationIconClick = {
+    //                        viewModel.putGastos(
+    //                            gastoViagem = GastoViagem(
+    //                                dataGasto = dataGasto.value,
+    //                                categoria = categoriaSelecionada.value,
+    //                                valorGasto = valorGasto.value.text.toDouble(),
+    //                                moeda = moedaSelecionada.value,
+    //                                descricaoGasto = descricaoGasto.value.text
+    //                            ),
+    //                            id = id
+    //                        )
+    //                    }, title = "Cadastrar Gasto")
+            DescViagemComponent(
+                onItemClick = { /*TODO*/ },
+                id = gasto.id,
+                dataGasto = gasto.dataGasto,
+                valor = gasto.valorGasto,
+                moeda = gasto.moeda,
+                categoria = gasto.categoria,
+                descricao = gasto.descricaoGasto
+            )
+        }
+        Spacer(modifier = Modifier.height(25.dp))
     }
-                Row (
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-
-                    Spacer(modifier = Modifier.height(60.dp))
-                    Text(text = "Editar Gasto", fontWeight = FontWeight.Bold, fontSize = 32.sp)
-                }
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(text = gasto.valorGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(0.95f),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        Text(text = gasto.valorGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                    }
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(text = gasto.moeda, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-                val moedaSelecionada: MutableState<String> = remember { mutableStateOf("") }
-                val moedas = listOf("Real", "Dollar", "Euro", "Libra", "Peso")
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(0.95f),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        boxSelector(categorias = moedas, title = "Moeda", selecionado = moedaSelecionada)
-                    }
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(text = gasto.categoria, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-                val categoriaSelecionada: MutableState<String> = remember { mutableStateOf("") }
-                val categorias = listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(0.95f),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    boxSelector(categorias = categorias, title = "Categoria", selecionado = categoriaSelecionada)
-                }
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(text = gasto.dataGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(0.95f),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Text(text = gasto.dataGasto.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(0.8f),
-                    horizontalArrangement = Arrangement.Start
-                ) {
-                    Text(text = gasto.descricaoGasto, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(0.95f),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Text(text = gasto.descricaoGasto, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                }
-
-
-
-}
 
 
