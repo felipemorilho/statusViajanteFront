@@ -1,6 +1,5 @@
-package br.com.empiricus.statusviajante.model.util
+package br.com.empiricus.statusviajante.integration.util
 
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -18,5 +17,5 @@ object DateSerialize: KSerializer<String> {
         encoder.encodeString("${date[2]}/${date[1]}/${date[0]}")
     }
 
-    override fun deserialize(decoder: Decoder)  = decoder.decodeString().replace("-", "/")
+    override fun deserialize(decoder: Decoder): String = decoder.decodeString().replace("-", "/")
 }

@@ -1,9 +1,9 @@
-package br.com.empiricus.statusviajante.model.repository
+package br.com.empiricus.statusviajante.integration.repository
 
 import br.com.digitalhouse.dhwallet.extension.updateState
 import br.com.digitalhouse.dhwallet.util.DataResult
-import br.com.empiricus.statusviajante.model.api.Api
-import br.com.empiricus.statusviajante.model.model.Viagem
+import br.com.empiricus.statusviajante.integration.api.Api
+import br.com.empiricus.statusviajante.integration.model.Viagem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -15,7 +15,7 @@ class ViagensRepository(
 ) {
 
     suspend fun getViagens() = flow{
-        val chamada = api.getAllViagens().viagens
+        val chamada = api.getAllViagens()
 
         if (chamada.isEmpty()) {
             emit(DataResult.Empty)

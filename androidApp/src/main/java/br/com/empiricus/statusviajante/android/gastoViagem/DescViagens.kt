@@ -1,4 +1,4 @@
-package br.com.empiricus.statusviajante.android.viagens
+package br.com.empiricus.statusviajante.android.gastoViagem
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,25 +14,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
-import br.com.empiricus.statusviajante.model.MockGastoViagem
-import br.com.empiricus.statusviajante.model.MockListaViagens
+import br.com.empiricus.statusviajante.android.viagens.ViagensViewModel
+import br.com.empiricus.statusviajante.integration.model.GastoViagem
+import br.com.empiricus.statusviajante.integration.model.Viagem
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
+fun DescViagens(id: String ,onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
+
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
-    val viewModel: ViagensViewModel = viewModel()
-    val viagemState by viewModel.viagemState.collectAsState()
+    val gastosViewModel: GastosViagemViewModel = viewModel()
+
+    gastosViewModel.getGastosViagem(id.toLong())
+
+    val gastosState by gastosViewModel.gastosViagemState.collectAsState()
+
+    val viagemViewModel: ViagensViewModel = viewModel()
+    viagemViewModel.getViagensById(id.toLong())
+    val viagemState by viagemViewModel.viagemState.collectAsState()
+
+
 
     MyApplicationTheme {
         Scaffold(
@@ -68,97 +78,20 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                         )
                     )
             ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    val gastosTotais = MockGastoViagem.gastosTotais
-                    val viagem = MockListaViagens.listaViagem
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = viagem[0].nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                        IconButton(onClick = {
-
-                        }) {
-                            Icon(imageVector = Icons.Filled.Delete, contentDescription = "botão deletar")
-                        }
-
-                        when(viagemState) {
-                            is DataResult.Loading -> CircularProgressIndicator()
-                            is DataResult.Error -> ErrorMessage((viagemState as DataResult.Error).error)
-                            is DataResult.Success ->((viagemState as DataResult.Success))
-                            else -> {}
-                        }
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Text(text = "DATAS", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-
-                        Column(
-                            modifier = Modifier.fillMaxWidth(0.95f),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            Text(text = "${viagem[0].dataInicio} - ${viagem[0].dataFinal}", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Text(text = "GASTOS", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-
-                        Column(
-                            modifier = Modifier.fillMaxWidth(0.95f),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            Text(text = gastosTotais.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Text(text = "DESCRIÇÃO", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        Column(
-                            modifier = Modifier.fillMaxWidth(0.95f),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            Text(text = viagem[0].descricao, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(17.dp))
+                when(viagemState) {
+                    is DataResult.Loading -> CircularProgressIndicator()
+                    is DataResult.Error -> ErrorMessage((viagemState as DataResult.Error).error)
+                    is DataResult.Success -> contentDescriptionViagem((viagemState as DataResult.Success<Viagem>))
+                    else -> {}
                 }
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.65f)
-                        .padding(bottom = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val gastos = MockGastoViagem.gastos
 
-                    items(gastos.size) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(0.65f)
-                        ) {
-                            DescViagemComponent(
-                                id = gastos[it].id,
-                                title = gastos[it].descricao,
-                                valor = gastos[it].valor,
-                                onItemClick = {}
-                            )
-                        }
-                    }
+                when(gastosState) {
+                    is DataResult.Loading -> CircularProgressIndicator()
+                    is DataResult.Error -> ErrorMessage((gastosState as DataResult.Error).error)
+                    is DataResult.Success -> contentDescriptionGastos((gastosState as DataResult.Success<List<GastoViagem>>))
+                    else -> {}
                 }
+
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -180,9 +113,100 @@ fun DescViagens(onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
     }
 }
 
-
-@Preview
 @Composable
-fun previewDescViagens() {
-    DescViagens ({},{true})
+fun contentDescriptionViagem(
+    retorno: DataResult.Success<Viagem>
+){
+    val viagem = retorno.data
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = viagem.nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+            IconButton(onClick = {
+
+            }) {
+                Icon(imageVector = Icons.Filled.Delete, contentDescription = "botão deletar")
+            }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "DATAS", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+
+            Column(
+                modifier = Modifier.fillMaxWidth(0.95f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(text = "${viagem.dataIda} - ${viagem.dataVolta}", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "GASTOS", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+
+            Column(
+                modifier = Modifier.fillMaxWidth(0.95f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(text = viagem.gastoTotal.toString(), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Text(text = "DESCRIÇÃO", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Column(
+                modifier = Modifier.fillMaxWidth(0.95f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(text = viagem.descricaoViagem, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            }
+        }
+        Spacer(modifier = Modifier.height(17.dp))
+    }
+}
+
+@Composable
+fun contentDescriptionGastos(
+    retorno: DataResult.Success<List<GastoViagem>>
+){
+    val gastos = retorno.data
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.65f)
+            .padding(bottom = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(gastos.size) {
+            Column(
+                modifier = Modifier.fillMaxWidth(0.65f)
+            ) {
+                DescViagemComponent(
+                    onItemClick = {  },
+                    id = gastos[it].id,
+                    dataGasto = gastos[it].dataGasto,
+                    valor = gastos[it].valorGasto,
+                    moeda = gastos[it].moeda,
+                    categoria = gastos[it].categoria,
+                    descricao = gastos[it].descricaoGasto
+                )
+            }
+        }
+    }
 }

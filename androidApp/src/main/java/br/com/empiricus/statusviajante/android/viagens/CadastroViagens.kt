@@ -13,10 +13,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
+import br.com.empiricus.statusviajante.android.viagens.ContenteViagens
 import br.com.empiricus.statusviajante.android.viagens.ViagensViewModel
-import br.com.empiricus.statusviajante.model.model.Viagem
+import br.com.empiricus.statusviajante.integration.model.Viagem
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,12 +32,9 @@ fun cadastroViagens(onBack: () -> Boolean) {
     val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
     val origem = remember { mutableStateOf(TextFieldValue()) }
     val destino = remember { mutableStateOf(TextFieldValue()) }
-    val selecionado: MutableState<String> = remember { mutableStateOf("") }
-    val moedaCorrente = listOf("Real", "Dolar Americano", "Peso Argentino", "Euro", "Yen")
     val dataInicio: MutableState<String> = remember { mutableStateOf("") }
     val dataFinal : MutableState<String> = remember { mutableStateOf("") }
     val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
-    val orcamentoDiario = remember { mutableStateOf(TextFieldValue()) }
     val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
     val descricao = remember { mutableStateOf(TextFieldValue()) }
 
@@ -114,14 +113,6 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    boxSelector(
-                        categorias = moedaCorrente,
-                        title = "Moeda Corrente",
-                        selecionado = selecionado
-                    )
-                }
-
-                item {
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f)
                     ) {
@@ -155,8 +146,8 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             Spacer(modifier = Modifier.height(25.dp))
                             outLinedTextFildComponent(
                                 modifier = Modifier.fillMaxWidth(0.95f),
-                                valor = orcamentoDiario,
-                                title = "Orçamento diario",
+                                valor = quantidadeVianjantes,
+                                title = "Quantidade de viajantes no grupo",
                                 keyboardType = KeyboardType.Number
                             )
                         }
@@ -164,29 +155,29 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 }
 
                 item {
-                    outLinedTextFildComponent(
-                        valor = quantidadeVianjantes,
-                        title = "Quantidade de viajantes no grupo",
-                        keyboardType = KeyboardType.Number
-                    )
-                }
-
-                item {
                     outLinedTextFildComponent(valor = descricao, title = "Descrição")
                 }
 
                 item {
+                    when(viagemState){
+                        is DataResult.Loading -> { LoadingIndicator() }
+                        is DataResult.Error -> { ErrorMessage((viagemState as DataResult.Error).error) }
+                        is DataResult.Success -> {}
+                        else -> {}
+                    }
                     outLinedButtonComponent(
                         onNavigationIconClick = {viewModel.postViagem(viagem = Viagem(
                             nome = nomeViagem.value.text,
                             origem = origem.value.text,
                             destino = destino.value.text,
-                            dataInicio = dataInicio.value,
-                            dataFinal = dataFinal.value,
-                            orcamentoTotal = orcamentoTotal.value.text.toDouble(),
-                            orcamentoDiario =orcamentoDiario.value.text.toDouble(),
-                            quantidadeViajantes = quantidadeVianjantes.value.text.toInt(),
-                            descricao = descricao.value.text
+                            dataIda = dataInicio.value,
+                            dataVolta = dataFinal.value,
+                            diasDeViagem = 0,
+                            orcamento = orcamentoTotal.value.text.toDouble(),
+                            orcamentoDiario = 0.0,
+                            gastoTotal = 0.0,
+                            qtdPessoas = quantidadeVianjantes.value.text.toInt(),
+                            descricaoViagem = descricao.value.text
                         ))},
                         title = "Cadastrar viagem")
                     Spacer(modifier = Modifier.height(25.dp))

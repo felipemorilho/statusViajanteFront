@@ -13,16 +13,27 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.isPopupLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
+import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
+import br.com.empiricus.statusviajante.integration.model.GastoViagem
 import kotlinx.coroutines.launch
 
 @Composable
-fun GastosViagem(onBack: () -> Boolean) {
+fun GastosViagem(id:Long, onBack: () -> Boolean) {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
+    val viewModel: GastosViagemViewModel = viewModel()
+    val gastosState by viewModel.gastoViagemState.collectAsState()
+
+    val valorGasto = remember { mutableStateOf(TextFieldValue()) }
+    val moedaSelecionada: MutableState<String> = remember { mutableStateOf("") }
+    val moedas = listOf("Real", "Dollar", "Euro", "Libra", "Peso")
+    val categoriaSelecionada: MutableState<String> = remember { mutableStateOf("") }
+    val categorias = listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
+    val dataGasto = remember { mutableStateOf("") }
+    val descricaoGasto = remember { mutableStateOf(TextFieldValue()) }
 
     MyApplicationTheme {
         Scaffold(
@@ -68,44 +79,49 @@ fun GastosViagem(onBack: () -> Boolean) {
                 }
 
                 item {
-
-                    val valorGasto = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = valorGasto, title = "Valor do Gasto")
                 }
 
                 item {
-                    var selecionado: MutableState<String> = remember { mutableStateOf("") }
-                    val categorias =
-                        listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
+                    boxSelector(categorias = moedas, title = "Moeda", selecionado = moedaSelecionada)
+                }
 
-                    boxSelector(categorias = categorias, title = "Categoria", selecionado = selecionado)
+
+                item {
+                    boxSelector(categorias = categorias, title = "Categoria", selecionado = categoriaSelecionada)
                 }
 
                 item {
-
-                    val dataGasto = remember { mutableStateOf("") }
                     boxSelectorCalendar(title = "Data", selecionado = dataGasto)
                 }
 
                 item {
-
-                    val descricaoGasto = remember { mutableStateOf(TextFieldValue()) }
                     outLinedTextFildComponent(valor = descricaoGasto, title = "Descrição")
                 }
 
                 item {
-
                     Spacer(modifier = Modifier.height(90.dp))
-                    outLinedButtonComponent(onNavigationIconClick = {onBack.invoke()}, title = "Cadastrar Gasto")
+
+                    when(gastosState) {
+                        is DataResult.Loading -> CircularProgressIndicator()
+                        is DataResult.Error -> ErrorMessage((gastosState as DataResult.Error).error)
+                        is DataResult.Success -> {}
+                        else -> {}
+                    }
+                    outLinedButtonComponent(onNavigationIconClick = {
+                        viewModel.postGastos(
+                            gastoViagem = GastoViagem(
+                                dataGasto = dataGasto.value,
+                                categoria = categoriaSelecionada.value,
+                                valorGasto = valorGasto.value.text.toDouble(),
+                                moeda = moedaSelecionada.value,
+                                descricaoGasto = descricaoGasto.value.text
+                            ),
+                            id = id
+                        )
+                    }, title = "Cadastrar Gasto")
                 }
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun gastosViagemPreview(){
-    GastosViagem (onBack = {true})
 }

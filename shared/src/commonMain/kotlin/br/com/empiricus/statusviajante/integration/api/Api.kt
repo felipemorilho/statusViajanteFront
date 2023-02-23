@@ -1,13 +1,16 @@
-package br.com.empiricus.statusviajante.model.api
+package br.com.empiricus.statusviajante.integration.api
 
-import br.com.empiricus.statusviajante.model.model.*
+import br.com.empiricus.statusviajante.integration.UserLogin
+import br.com.empiricus.statusviajante.integration.model.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.http.HttpHeaders.AuthenticationInfo
 import io.ktor.http.HttpHeaders.Authorization
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -27,26 +30,26 @@ class Api {
         defaultRequest {
             contentType(ContentType.Application.Json)
             accept(ContentType.Application.Json)
-            header(Authorization,"$token")
+            header(Authorization, token)
         }
     }
 
     //============================ Login ===================================
-    suspend fun login(login: Login): ProfileToken {
-        return httpClient.post("$DEFAULT_URL/usuarios/logar") {
+    suspend fun login(login: UserLogin): ProfileToken {
+        return httpClient.post("$DEFAULT_URL/login") {
             setBody(login)
         }.body()
     }
 
     //============================ Cadastro =================================
-    suspend fun cadastro(cadastroUsuario: CadastroUsuario): CadastroUsuario {
-        return httpClient.post("$DEFAULT_URL/usuarios/cadastrar") {
+    suspend fun cadastro(cadastroUsuario: Usuario): Usuario {
+        return httpClient.post("$DEFAULT_URL/cadastrar") {
             setBody(cadastroUsuario)
         }.body()
     }
 
     //============================ Viagens ==================================
-    suspend fun getAllViagens(): ViagensResponse {
+    suspend fun getAllViagens(): List<Viagem> {
         return httpClient.get("$DEFAULT_URL/viagens").body()
     }
 
@@ -71,20 +74,24 @@ class Api {
     }
 
     //============================ Gastos ==================================
-    suspend fun getAllGastos(): GastosResponse {
-        return httpClient.get("$DEFAULT_URL/gasto_viagem").body()
+    suspend fun getAllGastos(id: Long): List<GastoViagem> {
+        return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
     }
 
     suspend fun getGastosById(id: Long): GastoViagem {
         return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
     }
 
-    suspend fun postGastos(gastoViagem: GastoViagem): GastoViagem {
-        return httpClient.post("$DEFAULT_URL/gasto_viagem").body()
+    suspend fun postGastos(gastoViagem: GastoViagem, id: Long): GastoViagem {
+        return httpClient.post("$DEFAULT_URL/gastos/${id}"){
+            setBody(gastoViagem)
+        }.body()
     }
 
     suspend fun putGastos(gastoViagem: GastoViagem): GastoViagem {
-        return httpClient.put("$DEFAULT_URL/gasto_viagem").body()
+        return httpClient.put("$DEFAULT_URL/gastos"){
+            setBody(gastoViagem)
+        }.body()
     }
 
     suspend fun  deleteGastos(id: Long): GastoViagem {
@@ -94,9 +101,8 @@ class Api {
     @ThreadLocal
     companion object {
         val instance by lazy { Api() }
-        var token: String = ""
-        const val DEFAULT_URL =
-            "http://statusviajante-env.eba-nvmskkkr.us-east-1.elasticbeanstalk.com"
+        var token = ""
+        const val DEFAULT_URL = "http://192.168.0.109:8080"
     }
 
 }

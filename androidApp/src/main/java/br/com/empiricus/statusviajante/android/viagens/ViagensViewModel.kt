@@ -3,8 +3,8 @@ package br.com.empiricus.statusviajante.android.viagens
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.digitalhouse.dhwallet.util.DataResult
-import br.com.empiricus.statusviajante.model.model.Viagem
-import br.com.empiricus.statusviajante.model.repository.ViagensRepository
+import br.com.empiricus.statusviajante.integration.model.Viagem
+import br.com.empiricus.statusviajante.integration.repository.ViagensRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -37,35 +37,12 @@ class ViagensViewModel(
     }
 
     fun postViagem(viagem: Viagem) = viewModelScope.launch {
-        val viagemCadastro = Viagem(
-            nome = viagem.nome,
-            origem = viagem.origem,
-            destino = viagem.destino,
-            dataInicio = viagem.dataInicio,
-            dataFinal = viagem.dataFinal,
-            orcamentoTotal = viagem.orcamentoTotal,
-            orcamentoDiario = viagem.orcamentoDiario,
-            quantidadeViajantes = viagem.quantidadeViajantes,
-            descricao = viagem.descricao
-        )
-
-        viagensRepository.postViagem(viagemCadastro).collectLatest {
+        viagensRepository.postViagem(viagem).collectLatest {
             _viagemState.value = it
         }
     }
       fun putViagem(viagem: Viagem) = viewModelScope.launch {
-          val viagemAtualizacao = Viagem(
-              nome = viagem.nome,
-              origem = viagem.origem,
-              destino = viagem.destino,
-              dataInicio = viagem.dataInicio,
-              dataFinal = viagem.dataFinal,
-              orcamentoTotal = viagem.orcamentoTotal,
-              orcamentoDiario = viagem.orcamentoDiario,
-              quantidadeViajantes = viagem.quantidadeViajantes,
-              descricao = viagem.descricao
-          )
-        viagensRepository.putViagem(viagemAtualizacao).collectLatest {
+        viagensRepository.putViagem(viagem).collectLatest {
             _viagemState.value = it
         }
     }

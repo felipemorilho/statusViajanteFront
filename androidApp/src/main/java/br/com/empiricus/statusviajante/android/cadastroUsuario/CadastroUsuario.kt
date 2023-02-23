@@ -20,19 +20,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
+import br.com.empiricus.statusviajante.integration.model.Usuario
 
 
 @Composable
-fun cadastroUsuario(onBack: () -> Boolean) {
+fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
 
     val viewModel: CadastroUsuariosViewModel = viewModel()
     val cadastroState by viewModel.cadastro.collectAsState()
+    val navigateToHome = remember { mutableStateOf(false) }
 
     val nome = remember { mutableStateOf(TextFieldValue()) }
     val nomeUsuario = remember { mutableStateOf(TextFieldValue()) }
     val email = remember { mutableStateOf(TextFieldValue()) }
     val senha = remember { mutableStateOf(TextFieldValue()) }
-    val dataNascimento = remember { mutableStateOf("") }
     val celular = remember { mutableStateOf(TextFieldValue()) }
 
 
@@ -83,10 +84,6 @@ fun cadastroUsuario(onBack: () -> Boolean) {
                 }
 
                 item {
-                    boxSelectorCalendar(selecionado = dataNascimento, title = "DATA NASCIMENTO")
-                }
-
-                item {
                     outLinedTextFildComponent(valor = celular, title = "CELULAR", keyboardType = KeyboardType.Phone)
                 }
 
@@ -96,23 +93,24 @@ fun cadastroUsuario(onBack: () -> Boolean) {
                     if (cadastroState is DataResult.Loading) {
                         CircularProgressIndicator()
                     } else {
-                        if (cadastroState is DataResult.Success) {
-                            onBack.invoke()
+                        if (cadastroState is DataResult.Success && !navigateToHome.value) {
+                            onNavCadastroSucesso.invoke()
+                            navigateToHome.value = true
                         }
 
                         if (cadastroState is DataResult.Error) {
 
                         }
                         outLinedButtonComponent(
-                            onNavigationIconClick = {
-                                viewModel.cadastrar(
+                            onNavigationIconClick = {viewModel.cadastrar(
+                                usuario = Usuario(
                                     nome = nome.value.text,
-                                    nomeUsuario = nomeUsuario.value.text,
-                                    email = email.value.text,
+                                    usuario = nomeUsuario.value.text,
                                     senha = senha.value.text,
-                                    dataNascimento = dataNascimento.value,
+                                    email = email.value.text,
                                     celular = celular.value.text
-                                )},
+                                )
+                            )},
                             title = "Cadastrar usuário"
                         )
                     }
@@ -127,5 +125,5 @@ fun cadastroUsuario(onBack: () -> Boolean) {
 @Preview
 @Composable
 fun loginPreview() {
-    cadastroUsuario(onBack = { true })
+    cadastroUsuario(onBack = { true }, {})
 }

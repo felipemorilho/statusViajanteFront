@@ -22,9 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
-import br.com.empiricus.statusviajante.android.Route
 import br.com.empiricus.statusviajante.android.components.*
-import br.com.empiricus.statusviajante.model.model.Viagem
+import br.com.empiricus.statusviajante.integration.model.Viagem
 import kotlinx.coroutines.launch
 
 
@@ -83,7 +82,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDet
                         ErrorMessage((viagensState as DataResult.Error).error)
                     }
                     is DataResult.Success -> {
-                        ContenteViagens(viagensState as DataResult.Success<List<Viagem>>, onItemDetail =  { onItemDetail })
+                        ContenteViagens(viagensState as DataResult.Success<List<Viagem>>, onItemDetail)
                     }
                     else -> {}
                 }
@@ -107,8 +106,9 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDet
 @Composable
 fun ContenteViagens(
     retorno: DataResult.Success<List<Viagem>>,
-    onItemDetail: () -> Unit
+    onItemDetail: (Long) -> Unit
 ){
+    val viewModel: ViagensViewModel = viewModel()
     val viagens = retorno.data
 
     LazyColumn(
@@ -121,11 +121,11 @@ fun ContenteViagens(
 
         items(viagens.size){
             listaViagemComponent(
-                onItemClick = { onItemDetail.invoke() },
+                onItemClick = { onItemDetail.invoke(viagens[it].id) },
                 id = viagens[it].id,
                 title = viagens[it].nome,
-                dataIda = viagens[it].dataInicio,
-                dataVolta = viagens[it].dataFinal
+                dataIda = viagens[it].dataIda,
+                dataVolta = viagens[it].dataVolta
             )
         }
     }
@@ -136,5 +136,5 @@ fun ContenteViagens(
 @Preview
 @Composable
 fun previewViagens() {
-    Viagens({}, {}, {})
+    Viagens({}, {}) {}
 }
