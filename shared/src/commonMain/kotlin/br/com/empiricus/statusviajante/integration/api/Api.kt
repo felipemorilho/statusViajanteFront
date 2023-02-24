@@ -35,7 +35,7 @@ class Api {
     }
 
     //============================ Login ===================================
-    suspend fun login(login: UserLogin): ProfileToken {
+    suspend fun login(login: UserLogin) {
         return httpClient.post("$DEFAULT_URL/login") {
             setBody(login)
         }.body()
@@ -78,6 +78,10 @@ class Api {
         return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
     }
 
+    suspend fun getGastosCategoria(categoria: String): List<GastoViagem> {
+        return httpClient.get("$DEFAULT_URL/gastos/${categoria}").body()
+    }
+
     suspend fun getGastosById(id: Long): GastoViagem {
         return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
     }
@@ -101,7 +105,7 @@ class Api {
     @ThreadLocal
     companion object {
         val instance by lazy { Api() }
-        var token = ""
+        var token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJFbWVyc29uTTIiLCJleHAiOjE2NzcyNTQ0MTJ9.11D2B9JtJ5NouQq1JIm16P80SkiTigbmK3aonkmXRwZt-QttpOXWBT3GxBTGw3hi-7vZsrTH_4EY3CDpC5ME_A"
         const val DEFAULT_URL = "http://192.168.0.109:8080"
     }
 

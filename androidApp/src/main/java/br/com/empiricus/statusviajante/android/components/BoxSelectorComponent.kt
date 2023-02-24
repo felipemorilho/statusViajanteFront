@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.viewinterop.AndroidView
@@ -31,7 +32,7 @@ import java.time.MonthDay.now
 fun boxSelector(
     categorias: List<String>,
     title: String,
-    selecionado: MutableState<String>,
+    selecionado: MutableState<TextFieldValue>,
     modifier: Modifier = Modifier,
     keyboardType: KeyboardType = KeyboardType.Text
 ){
@@ -90,13 +91,13 @@ fun boxSelector(
                     )
                 )
         ) {
-            categorias.forEach { label ->
+            categorias.forEach {
                 DropdownMenuItem(onClick = {
-                    selecionado.value = label
+                    selecionado.value = TextFieldValue(it)
                     expanded = false
                 }
                 ) {
-                    Text(text = label)
+                    Text(text = it)
                 }
             }
         }
@@ -106,7 +107,7 @@ fun boxSelector(
 fun boxSelectorCalendar(
     title: String,
     modifier: Modifier = Modifier,
-    selecionado: MutableState<String>,
+    selecionado: MutableState<TextFieldValue>,
 
     ){
     var expanded by remember { mutableStateOf(false) }
@@ -167,7 +168,7 @@ fun boxSelectorCalendar(
                 update = {
                     it.setOnDateChangeListener { _, year, month, day ->
                         val mes = month + 1
-                        selecionado.value = "$day/$mes/$year"
+                        selecionado.value = TextFieldValue("$day/$mes/$year")
                         expanded = false
                     }
                 }

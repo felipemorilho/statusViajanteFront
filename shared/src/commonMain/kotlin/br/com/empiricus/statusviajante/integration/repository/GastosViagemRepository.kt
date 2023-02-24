@@ -14,35 +14,35 @@ class GastosViagemRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    suspend fun getGastos(id: Long) = flow{
+    suspend fun getGastos(id: Long) = flow {
         val chamada = api.getAllGastos(id)
-
-        if (chamada.isEmpty()) {
-            emit(DataResult.Empty)
-        } else {
-            emit(DataResult.Success(chamada))
-        }
+        emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 
-    suspend fun getGastosById(id: Long) = flow<DataResult<GastoViagem>> {
+    suspend fun getGastosCategoria(categoria: String) = flow {
+        val chamada = api.getGastosCategoria(categoria)
+        emit(DataResult.Success(chamada))
+    }.updateState().flowOn(dispatcher)
+
+    suspend fun getGastosById(id: Long) = flow {
         val chamada = api.getGastosById(id)
         emit(DataResult.Success(chamada))
-    }
+    }.updateState().flowOn(dispatcher)
 
-    suspend fun postGastos(gastoViagem: GastoViagem, id: Long) = flow<DataResult<GastoViagem>> {
+    suspend fun postGastos(gastoViagem: GastoViagem, id: Long) = flow {
         val chamda = api.postGastos(gastoViagem, id)
         emit(DataResult.Success(chamda))
-    }
+    }.updateState().flowOn(dispatcher)
 
     suspend fun putGastos(gastoViagem: GastoViagem) = flow<DataResult<GastoViagem>> {
         val chamada = api.putGastos(gastoViagem)
         emit(DataResult.Success(chamada))
-    }
+    }.updateState().flowOn(dispatcher)
 
-    suspend fun deleteGastos(id: Long) = flow<DataResult<*>> {
+    suspend fun deleteGastos(id: Long) = flow {
         val chamada = api.deleteGastos(id)
         emit(DataResult.Success(chamada))
-    }
+    }.updateState().flowOn(dispatcher)
 
 
     companion object{

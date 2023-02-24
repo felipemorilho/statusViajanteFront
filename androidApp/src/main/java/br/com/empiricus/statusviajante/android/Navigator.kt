@@ -64,15 +64,16 @@ fun navigator(
             val id = it.arguments?.getString("id")
             DescViagens(
                 id = id ?: "0",
-                onNavNovoGasto = { navHostController.navigate(Route.NovoGastoViagem.name) },
+                onNavNovoGasto = { navHostController.navigate("${Route.NovoGastoViagem}/${it}") },
                 onBack = { navHostController.popBackStack() },
 
             )
         }
-        composable(Route.NovoGastoViagem.name){
+        composable("${Route.NovoGastoViagem}/{id}"){
+            val id = it.arguments?.getString("id")
             GastosViagem(
+                id = id ?: "0",
                 onBack = { navHostController.popBackStack() },
-
             )
         }
         composable(Route.CadastroSucesso.name){

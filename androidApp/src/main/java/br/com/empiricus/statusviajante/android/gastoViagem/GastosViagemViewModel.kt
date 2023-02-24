@@ -22,7 +22,6 @@ class GastosViagemViewModel(
     val gastosViagemState: StateFlow<DataResult<List<GastoViagem>>> = _gastosViagemState
 
 
-
     fun getGastosViagem(id: Long) = viewModelScope.launch {
         gastosViagemRepository.getGastos(id).collectLatest {
             _gastosViagemState.value = it
@@ -32,6 +31,11 @@ class GastosViagemViewModel(
     fun getGastosById(id: Long) = viewModelScope.launch {
         gastosViagemRepository.getGastosById(id).collectLatest {
             _gastoViagemState.value = it
+        }
+    }
+    fun getGastosCategoria(categoria: String) = viewModelScope.launch {
+        gastosViagemRepository.getGastosCategoria(categoria).collectLatest {
+            _gastosViagemState.value = it
         }
     }
 

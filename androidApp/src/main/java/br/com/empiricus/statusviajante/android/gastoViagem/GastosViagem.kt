@@ -21,18 +21,18 @@ import br.com.empiricus.statusviajante.integration.model.GastoViagem
 import kotlinx.coroutines.launch
 
 @Composable
-fun GastosViagem(id:Long, onBack: () -> Boolean) {
+fun GastosViagem(id: String, onBack: () -> Boolean) {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val viewModel: GastosViagemViewModel = viewModel()
     val gastosState by viewModel.gastoViagemState.collectAsState()
 
     val valorGasto = remember { mutableStateOf(TextFieldValue()) }
-    val moedaSelecionada: MutableState<String> = remember { mutableStateOf("") }
     val moedas = listOf("Real", "Dollar", "Euro", "Libra", "Peso")
-    val categoriaSelecionada: MutableState<String> = remember { mutableStateOf("") }
+    val moedaSelecionada = remember { mutableStateOf(TextFieldValue()) }
     val categorias = listOf("Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
-    val dataGasto = remember { mutableStateOf("") }
+    val categoriaSelecionada = remember { mutableStateOf(TextFieldValue()) }
+    val dataGasto = remember { mutableStateOf(TextFieldValue()) }
     val descricaoGasto = remember { mutableStateOf(TextFieldValue()) }
 
     MyApplicationTheme {
@@ -105,19 +105,19 @@ fun GastosViagem(id:Long, onBack: () -> Boolean) {
                     when(gastosState) {
                         is DataResult.Loading -> CircularProgressIndicator()
                         is DataResult.Error -> ErrorMessage((gastosState as DataResult.Error).error)
-                        is DataResult.Success -> {}
+                        is DataResult.Success -> {onBack.invoke()}
                         else -> {}
                     }
                     outLinedButtonComponent(onNavigationIconClick = {
                         viewModel.postGastos(
                             gastoViagem = GastoViagem(
-                                dataGasto = dataGasto.value,
-                                categoria = categoriaSelecionada.value,
+                                dataGasto = dataGasto.value.text,
+                                categoria = categoriaSelecionada.value.text,
                                 valorGasto = valorGasto.value.text.toDouble(),
-                                moeda = moedaSelecionada.value,
+                                moeda = moedaSelecionada.value.text,
                                 descricaoGasto = descricaoGasto.value.text
                             ),
-                            id = id
+                            id = id.toLong()
                         )
                     }, title = "Cadastrar Gasto")
                 }

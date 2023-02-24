@@ -6,10 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -27,7 +24,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun DescViagens(id: String ,onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
+fun DescViagens(id: String ,onNavNovoGasto: (Long) -> Unit, onBack: () -> Boolean) {
 
 
     val scope = rememberCoroutineScope()
@@ -78,6 +75,8 @@ fun DescViagens(id: String ,onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                         )
                     )
             ) {
+
+
                 when(viagemState) {
                     is DataResult.Loading -> CircularProgressIndicator()
                     is DataResult.Error -> ErrorMessage((viagemState as DataResult.Error).error)
@@ -97,7 +96,7 @@ fun DescViagens(id: String ,onNavNovoGasto: () -> Unit, onBack: () -> Boolean) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     outLinedButtonComponent(
-                        onNavigationIconClick = { onNavNovoGasto.invoke() },
+                        onNavigationIconClick = { onNavNovoGasto.invoke(id.toLong()) },
                         title = "ADICIONAR NOVO GASTO"
                     )
                     Spacer(modifier = Modifier.height(20.dp))
@@ -184,6 +183,8 @@ fun contentDescriptionGastos(
     retorno: DataResult.Success<List<GastoViagem>>
 ){
     val gastos = retorno.data
+    var listaGastos = gastos
+
 
     LazyColumn(
         modifier = Modifier
@@ -193,18 +194,19 @@ fun contentDescriptionGastos(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(gastos.size) {
+
+        items(listaGastos.size) {
             Column(
                 modifier = Modifier.fillMaxWidth(0.65f)
             ) {
                 DescViagemComponent(
                     onItemClick = {  },
-                    id = gastos[it].id,
-                    dataGasto = gastos[it].dataGasto,
-                    valor = gastos[it].valorGasto,
-                    moeda = gastos[it].moeda,
-                    categoria = gastos[it].categoria,
-                    descricao = gastos[it].descricaoGasto
+                    id = listaGastos[it].id,
+                    dataGasto = listaGastos[it].dataGasto,
+                    valor = listaGastos[it].valorGasto,
+                    moeda = listaGastos[it].moeda,
+                    categoria = listaGastos[it].categoria,
+                    descricao = listaGastos[it].descricaoGasto
                 )
             }
         }

@@ -32,8 +32,8 @@ fun cadastroViagens(onBack: () -> Boolean) {
     val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
     val origem = remember { mutableStateOf(TextFieldValue()) }
     val destino = remember { mutableStateOf(TextFieldValue()) }
-    val dataInicio: MutableState<String> = remember { mutableStateOf("") }
-    val dataFinal : MutableState<String> = remember { mutableStateOf("") }
+    val dataInicio = remember { mutableStateOf(TextFieldValue()) }
+    val dataFinal = remember { mutableStateOf(TextFieldValue()) }
     val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
     val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
     val descricao = remember { mutableStateOf(TextFieldValue()) }
@@ -162,7 +162,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                     when(viagemState){
                         is DataResult.Loading -> { LoadingIndicator() }
                         is DataResult.Error -> { ErrorMessage((viagemState as DataResult.Error).error) }
-                        is DataResult.Success -> {}
+                        is DataResult.Success -> {onBack.invoke()}
                         else -> {}
                     }
                     outLinedButtonComponent(
@@ -170,8 +170,8 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             nome = nomeViagem.value.text,
                             origem = origem.value.text,
                             destino = destino.value.text,
-                            dataIda = dataInicio.value,
-                            dataVolta = dataFinal.value,
+                            dataIda = dataInicio.value.text,
+                            dataVolta = dataFinal.value.text,
                             diasDeViagem = 0,
                             orcamento = orcamentoTotal.value.text.toDouble(),
                             orcamentoDiario = 0.0,

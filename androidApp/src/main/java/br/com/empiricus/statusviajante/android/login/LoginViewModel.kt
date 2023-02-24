@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val loginRepository: LoginRepository = LoginRepository.instance): ViewModel() {
 
-    private val _loginState: MutableStateFlow<DataResult<ProfileToken>> = MutableStateFlow(
+    private val _loginState: MutableStateFlow<DataResult<*>> = MutableStateFlow(
         DataResult.Empty)
-    val loginState: StateFlow<DataResult<ProfileToken>> = _loginState
+    val loginState: StateFlow<DataResult<*>> = _loginState
 
     fun login(usuario: String, senha: String) = viewModelScope.launch {
         val user = UserLogin(usuario = usuario, senha = senha)

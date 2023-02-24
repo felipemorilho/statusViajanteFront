@@ -15,7 +15,7 @@ class LoginRepository(
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
 
-    suspend fun login(login: UserLogin) = flow<DataResult<ProfileToken>> {
+    suspend fun login(login: UserLogin) = flow<DataResult<*>> {
         val data = api.login(login)
         emit(DataResult.Success(data))
     }.updateState().flowOn(dispatcher)
