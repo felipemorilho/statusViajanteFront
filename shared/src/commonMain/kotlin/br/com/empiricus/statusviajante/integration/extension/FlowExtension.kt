@@ -1,6 +1,6 @@
 package br.com.digitalhouse.dhwallet.extension
 
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

@@ -4,6 +4,7 @@ import android.widget.CalendarView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -25,8 +26,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.viewinterop.AndroidView
-import java.time.LocalDateTime
-import java.time.MonthDay.now
 
 @Composable
 fun boxSelector(
@@ -34,7 +33,8 @@ fun boxSelector(
     title: String,
     selecionado: MutableState<TextFieldValue>,
     modifier: Modifier = Modifier,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    shape: CornerBasedShape = MaterialTheme.shapes.medium
 ){
 
     var expanded by remember { mutableStateOf(false) }
@@ -49,7 +49,7 @@ fun boxSelector(
             onValueChange = { selecionado.value = it },
             modifier = modifier
                 .wrapContentSize(Alignment.TopStart)
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth(0.75f)
                 .height(60.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
@@ -67,7 +67,7 @@ fun boxSelector(
                     Modifier.clickable { expanded = !expanded })
             },
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-            shape = MaterialTheme.shapes.medium,
+            shape = shape,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = MaterialTheme.colors.secondary,
                 unfocusedBorderColor = MaterialTheme.colors.secondary,
@@ -118,7 +118,7 @@ fun boxSelectorCalendar(
 
         OutlinedTextField(
             modifier = modifier
-                .fillMaxWidth(0.8f)
+                .fillMaxWidth(0.75f)
                 .height(60.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
@@ -168,8 +168,20 @@ fun boxSelectorCalendar(
                 update = {
                     it.setOnDateChangeListener { _, year, month, day ->
                         val mes = month + 1
-                        selecionado.value = TextFieldValue("$day/$mes/$year")
+                        if ("$day".length == 1 && "$mes".length == 1){
+                            selecionado.value = TextFieldValue("0$day/0$mes/$year")
+                        }
+                        else if ("$day".length == 1){
+                            selecionado.value = TextFieldValue("0$day/$mes/$year")
+                        }
+                        else if ("$mes".length == 1){
+                            selecionado.value = TextFieldValue("$day/0$mes/$year")
+                        }
+                        else{
+                            selecionado.value = TextFieldValue("$day/$mes/$year")
+                        }
                         expanded = false
+
                     }
                 }
             )

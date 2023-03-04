@@ -1,7 +1,7 @@
 package br.com.empiricus.statusviajante.integration.repository
 
 import br.com.digitalhouse.dhwallet.extension.updateState
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.integration.api.Api
 import br.com.empiricus.statusviajante.integration.model.Viagem
 import kotlinx.coroutines.CoroutineDispatcher

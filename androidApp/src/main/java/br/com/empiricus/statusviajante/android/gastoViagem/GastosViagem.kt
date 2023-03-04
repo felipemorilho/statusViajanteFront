@@ -1,5 +1,6 @@
 package br.com.empiricus.statusviajante.android.gastoViagem
 
+import MyAlertDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,18 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
 import br.com.empiricus.statusviajante.integration.model.GastoViagem
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import kotlinx.coroutines.launch
 
 @Composable
-fun GastosViagem(id: String, onBack: () -> Boolean) {
+fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -> Unit) {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val viewModel: GastosViagemViewModel = viewModel()
@@ -100,24 +100,24 @@ fun GastosViagem(id: String, onBack: () -> Boolean) {
                 }
 
                 item {
-                    Spacer(modifier = Modifier.height(90.dp))
-
                     when(gastosState) {
                         is DataResult.Loading -> CircularProgressIndicator()
                         is DataResult.Error -> ErrorMessage((gastosState as DataResult.Error).error)
-                        is DataResult.Success -> {onBack.invoke()}
+                        is DataResult.Success -> {MyAlertDialog(
+                            title = "Uhuuu!!",
+                            message = "Gasto cadastrado com sucesso",
+                            onDismiss = {onBack.invoke()}
+                        )}
                         else -> {}
                     }
                     outLinedButtonComponent(onNavigationIconClick = {
-                        viewModel.postGastos(
-                            gastoViagem = GastoViagem(
-                                dataGasto = dataGasto.value.text,
-                                categoria = categoriaSelecionada.value.text,
-                                valorGasto = valorGasto.value.text.toDouble(),
-                                moeda = moedaSelecionada.value.text,
-                                descricaoGasto = descricaoGasto.value.text
-                            ),
-                            id = id.toLong()
+                        viewModel.postGastos(id = id.toLong(), gastoViagem = GastoViagem(
+                            dataGasto = dataGasto.value.text,
+                            categoria = categoriaSelecionada.value.text,
+                            valorGasto = valorGasto.value.text.toDouble(),
+                            moeda = moedaSelecionada.value.text,
+                            descricaoGasto = descricaoGasto.value.text
+                        ),
                         )
                     }, title = "Cadastrar Gasto")
                 }

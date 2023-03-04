@@ -2,9 +2,8 @@ package br.com.empiricus.statusviajante.android.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.integration.UserLogin
-import br.com.empiricus.statusviajante.integration.model.ProfileToken
 import br.com.empiricus.statusviajante.integration.repository.LoginRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

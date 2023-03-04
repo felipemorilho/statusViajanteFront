@@ -35,7 +35,7 @@ fun outLinedButtonComponent(
     OutlinedButton(onClick = onNavigationIconClick,
         shape = MaterialTheme.shapes.medium,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary),
-        modifier = modifier.fillMaxWidth(0.8f)
+        modifier = modifier.fillMaxWidth(0.75f)
             .height(60.dp)
     )   {
         Text(
@@ -62,7 +62,7 @@ fun outLinedButtonTransparent(
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.primary
         ),
-        modifier = modifier.fillMaxWidth(0.8f)
+        modifier = modifier.fillMaxWidth(0.75f)
             .height(60.dp)
     )   {
         Text(

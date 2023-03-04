@@ -2,7 +2,7 @@ package br.com.empiricus.statusviajante.android.cadastroUsuario
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.integration.model.Usuario
 import br.com.empiricus.statusviajante.integration.repository.CadastroUsuarioRepository
 import kotlinx.coroutines.flow.MutableStateFlow

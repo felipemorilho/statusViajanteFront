@@ -9,6 +9,7 @@ import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.HttpHeaders.AuthenticationInfo
 import io.ktor.http.HttpHeaders.Authorization
@@ -34,11 +35,18 @@ class Api {
         }
     }
 
+
     //============================ Login ===================================
-    suspend fun login(login: UserLogin) {
-        return httpClient.post("$DEFAULT_URL/login") {
+    suspend fun login(login: UserLogin): String {
+        val response = httpClient.post("$DEFAULT_URL/login") {
             setBody(login)
-        }.body()
+        }
+        val token = response.headers[Authorization]
+        if (token != null) {
+            return token
+        } else {
+            throw RuntimeException("Authentication failed")
+        }
     }
 
     //============================ Cadastro =================================
@@ -79,14 +87,14 @@ class Api {
     }
 
     suspend fun getGastosCategoria(categoria: String): List<GastoViagem> {
-        return httpClient.get("$DEFAULT_URL/gastos/${categoria}").body()
+        return httpClient.get("$DEFAULT_URL/gastos/categoria/${categoria}").body()
     }
 
     suspend fun getGastosById(id: Long): GastoViagem {
         return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
     }
 
-    suspend fun postGastos(gastoViagem: GastoViagem, id: Long): GastoViagem {
+    suspend fun postGastos(id: Long, gastoViagem: GastoViagem): GastoViagem {
         return httpClient.post("$DEFAULT_URL/gastos/${id}"){
             setBody(gastoViagem)
         }.body()
@@ -105,7 +113,7 @@ class Api {
     @ThreadLocal
     companion object {
         val instance by lazy { Api() }
-        var token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJFbWVyc29uTTIiLCJleHAiOjE2NzcyNTQ0MTJ9.11D2B9JtJ5NouQq1JIm16P80SkiTigbmK3aonkmXRwZt-QttpOXWBT3GxBTGw3hi-7vZsrTH_4EY3CDpC5ME_A"
+        var token = ""
         const val DEFAULT_URL = "http://192.168.0.109:8080"
     }
 

@@ -2,7 +2,7 @@ package br.com.empiricus.statusviajante.android.viagens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.integration.model.Viagem
 import br.com.empiricus.statusviajante.integration.repository.ViagensRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,9 +46,8 @@ class ViagensViewModel(
             _viagemState.value = it
         }
     }
-      fun deleteViagem(viagem: Viagem) = viewModelScope.launch {
-          val viagemId = viagem.id
-        viagensRepository.deleteViagem(viagemId).collectLatest {
+      fun deleteViagem(id: Long) = viewModelScope.launch {
+        viagensRepository.deleteViagem(id).collectLatest {
         }
     }
 

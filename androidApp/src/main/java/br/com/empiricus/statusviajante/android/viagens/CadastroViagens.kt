@@ -1,9 +1,12 @@
 package br.com.empiricus.statusviajante.android.cadastroviagens
 
+import MyAlertDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,12 +16,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import br.com.digitalhouse.dhwallet.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
-import br.com.empiricus.statusviajante.android.viagens.ContenteViagens
 import br.com.empiricus.statusviajante.android.viagens.ViagensViewModel
 import br.com.empiricus.statusviajante.integration.model.Viagem
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import kotlinx.coroutines.launch
 
 @Composable
@@ -75,7 +77,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                     )
                     .fillMaxSize()
                     .padding(it),
-                verticalArrangement = Arrangement.spacedBy(25.dp),
+                verticalArrangement = Arrangement.spacedBy(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 item {
@@ -85,7 +87,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
 
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth(0.8f)
+                        modifier = Modifier.fillMaxWidth(0.78f)
                     ) {
 
                         Column(
@@ -114,7 +116,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
 
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth(0.8f)
+                        modifier = Modifier.fillMaxWidth(0.78f)
                     ) {
                         Column(
                             modifier = Modifier.fillMaxWidth(0.5f),
@@ -147,7 +149,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
                             outLinedTextFildComponent(
                                 modifier = Modifier.fillMaxWidth(0.95f),
                                 valor = quantidadeVianjantes,
-                                title = "Quantidade de viajantes no grupo",
+                                title = "Nº de viajantes",
                                 keyboardType = KeyboardType.Number
                             )
                         }
@@ -156,13 +158,18 @@ fun cadastroViagens(onBack: () -> Boolean) {
 
                 item {
                     outLinedTextFildComponent(valor = descricao, title = "Descrição")
+                    Spacer(modifier = Modifier.height(25.dp))
                 }
 
                 item {
-                    when(viagemState){
+                    when(viagemState) {
                         is DataResult.Loading -> { LoadingIndicator() }
                         is DataResult.Error -> { ErrorMessage((viagemState as DataResult.Error).error) }
-                        is DataResult.Success -> {onBack.invoke()}
+                        is DataResult.Success -> {MyAlertDialog(
+                            title = "Uhuuu!!",
+                            message = "Viagem cadastrada com sucesso",
+                            onDismiss = {onBack.invoke()}
+                        )}
                         else -> {}
                     }
                     outLinedButtonComponent(

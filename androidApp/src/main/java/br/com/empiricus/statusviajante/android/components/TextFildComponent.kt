@@ -30,7 +30,7 @@ fun outLinedTextFildComponent(
 ){
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth(0.8f)
+            .fillMaxWidth(0.78f)
             .height(60.dp),
         value = valor.value,
         onValueChange = { valor.value = it },
@@ -67,7 +67,7 @@ fun outLinedTextFildPassword (
 
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth(0.8f)
+            .fillMaxWidth(0.78f)
             .height(60.dp),
         value = valor.value,
         onValueChange = { valor.value = it },

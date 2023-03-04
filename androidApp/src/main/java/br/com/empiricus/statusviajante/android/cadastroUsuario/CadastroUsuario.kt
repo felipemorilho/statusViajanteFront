@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
 import br.com.empiricus.statusviajante.integration.model.Usuario
@@ -90,37 +90,41 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                 item {
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    if (cadastroState is DataResult.Loading) {
-                        CircularProgressIndicator()
-                    } else {
-                        if (cadastroState is DataResult.Success && !navigateToHome.value) {
-                            onNavCadastroSucesso.invoke()
-                            navigateToHome.value = true
-                        }
+//                    if (cadastroState is DataResult.Loading) {
+//                        CircularProgressIndicator()
+//                    } else {
+//                        if (cadastroState is DataResult.Success && !navigateToHome.value) {
+//                            onNavCadastroSucesso.invoke()
+//                            navigateToHome.value = true
+//                        }
+//                        if (cadastroState is DataResult.Error) {}
 
-                        if (cadastroState is DataResult.Error) {
-
-                        }
-                        outLinedButtonComponent(
-                            onNavigationIconClick = {viewModel.cadastrar(
-                                usuario = Usuario(
-                                    nome = nome.value.text,
-                                    usuario = nomeUsuario.value.text,
-                                    senha = senha.value.text,
-                                    email = email.value.text,
-                                    celular = celular.value.text
-                                )
-                            )},
-                            title = "Cadastrar usuário"
-                        )
+                    when(cadastroState) {
+                        is DataResult.Loading -> CircularProgressIndicator()
+                        is DataResult.Error -> ErrorMessage((cadastroState as DataResult.Error).error)
+                        is DataResult.Success -> {onNavCadastroSucesso.invoke()}
+                        else -> {}
                     }
-
-
+                    outLinedButtonComponent(
+                        onNavigationIconClick = {viewModel.cadastrar(
+                            usuario = Usuario(
+                                nome = nome.value.text,
+                                usuario = nomeUsuario.value.text,
+                                senha = senha.value.text,
+                                email = email.value.text,
+                                celular = celular.value.text
+                            )
+                        )},
+                        title = "Cadastrar usuário"
+                    )
                 }
+
+
             }
         }
     }
 }
+
 
 @Preview
 @Composable

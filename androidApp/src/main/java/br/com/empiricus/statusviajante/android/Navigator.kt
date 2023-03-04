@@ -74,6 +74,7 @@ fun navigator(
             GastosViagem(
                 id = id ?: "0",
                 onBack = { navHostController.popBackStack() },
+                onNavDetalheViagem = { navHostController.navigate("${Route.DetalheViagem}/${it}") }
             )
         }
         composable(Route.CadastroSucesso.name){

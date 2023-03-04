@@ -1,10 +1,9 @@
 package br.com.empiricus.statusviajante.integration.repository
 
 import br.com.digitalhouse.dhwallet.extension.updateState
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.integration.UserLogin
 import br.com.empiricus.statusviajante.integration.api.Api
-import br.com.empiricus.statusviajante.integration.model.ProfileToken
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -17,6 +16,7 @@ class LoginRepository(
 
     suspend fun login(login: UserLogin) = flow<DataResult<*>> {
         val data = api.login(login)
+        Api.token = data
         emit(DataResult.Success(data))
     }.updateState().flowOn(dispatcher)
 

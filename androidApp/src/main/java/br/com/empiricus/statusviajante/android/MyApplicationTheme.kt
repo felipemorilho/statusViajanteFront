@@ -44,7 +44,7 @@ fun MyApplicationTheme(
         )
     )
     val shapes = Shapes(
-        small = RoundedCornerShape(18.dp),
+        small = RoundedCornerShape(20.dp),
         medium = CutCornerShape(topStart = 21.dp, bottomEnd = 21.dp ),
         large = RoundedCornerShape(0.dp)
     )

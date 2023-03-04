@@ -1,7 +1,7 @@
 package br.com.empiricus.statusviajante.integration.repository
 
 import br.com.digitalhouse.dhwallet.extension.updateState
-import br.com.digitalhouse.dhwallet.util.DataResult
+import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.integration.api.Api
 import br.com.empiricus.statusviajante.integration.model.GastoViagem
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,8 +29,8 @@ class GastosViagemRepository(
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 
-    suspend fun postGastos(gastoViagem: GastoViagem, id: Long) = flow {
-        val chamda = api.postGastos(gastoViagem, id)
+    suspend fun postGastos(id: Long, gastoViagem: GastoViagem) = flow {
+        val chamda = api.postGastos(id, gastoViagem)
         emit(DataResult.Success(chamda))
     }.updateState().flowOn(dispatcher)
 

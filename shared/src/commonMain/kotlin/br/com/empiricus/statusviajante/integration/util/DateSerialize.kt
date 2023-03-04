@@ -13,9 +13,8 @@ object DateSerialize: KSerializer<String> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Date", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: String) {
-        val date = value.split("-")
-        encoder.encodeString("${date[2]}/${date[1]}/${date[0]}")
+        encoder.encodeString(value)
     }
 
-    override fun deserialize(decoder: Decoder): String = decoder.decodeString().replace("-", "/")
+    override fun deserialize(decoder: Decoder): String = decoder.decodeString()
 }
