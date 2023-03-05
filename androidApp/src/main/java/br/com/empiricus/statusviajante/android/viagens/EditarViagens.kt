@@ -22,12 +22,14 @@ import br.com.empiricus.statusviajante.integration.util.DataResult
 import kotlinx.coroutines.launch
 
 @Composable
-fun cadastroViagens(onBack: () -> Boolean) {
+fun EditarViagens(id: String, onBack: () -> Boolean) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val viewModel: ViagensViewModel = viewModel()
     val viagemState by viewModel.viagemState.collectAsState()
+
+    viewModel.getViagensById(id.toLong())
 
     val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
     val origem = remember { mutableStateOf(TextFieldValue()) }
@@ -37,13 +39,14 @@ fun cadastroViagens(onBack: () -> Boolean) {
     val orcamentoTotal = remember { mutableStateOf(TextFieldValue()) }
     val quantidadeVianjantes = remember { mutableStateOf(TextFieldValue()) }
     val descricao = remember { mutableStateOf(TextFieldValue()) }
+    val attViagem = remember { mutableStateOf(false) }
 
 
 
     MyApplicationTheme {
         Scaffold(
             scaffoldState = scaffoldState,
-            topBar = {topBarComponent()},
+            topBar = { topBarComponent() },
             bottomBar = { bottonBarComponent(
                 onBack = {onBack.invoke()},
                 onNavDrawer = {
@@ -163,29 +166,34 @@ fun cadastroViagens(onBack: () -> Boolean) {
                     when(viagemState) {
                         is DataResult.Loading -> { LoadingIndicator() }
                         is DataResult.Error -> { ErrorMessage((viagemState as DataResult.Error).error) }
-                        is DataResult.Success -> {MyAlertDialog(
-                            title = "Uhuuu!!",
-                            message = "Viagem cadastrada com sucesso",
-                            onDismiss = {onBack.invoke()}
-                        )}
                         else -> {}
                     }
+                    when{
+                        viagemState is DataResult.Success && attViagem.value == true ->  {MyAlertDialog(
+                            title = "Uhuuu!!",
+                            message = "Viagem Editada com sucesso",
+                            onDismiss = {onBack.invoke()}
+                        )}
+                    }
                     outLinedButtonComponent(
-                        onNavigationIconClick = {viewModel.postViagem(viagem = Viagem(
-                            nome = nomeViagem.value.text,
-                            origem = origem.value.text,
-                            destino = destino.value.text,
-                            dataIda = dataInicio.value.text,
-                            dataVolta = dataFinal.value.text,
-                            diasDeViagem = 0,
-                            orcamento = orcamentoTotal.value.text.toDouble(),
-                            orcamentoDiario = 0.0,
-                            orcamentoRestante = 0.0,
-                            gastoTotal = 0.0,
-                            qtdPessoas = quantidadeVianjantes.value.text.toInt(),
-                            descricaoViagem = descricao.value.text
-                        ))},
-                        title = "Cadastrar viagem")
+                        onNavigationIconClick = {
+                            attViagem.value = true
+                            viewModel.putViagem(id = id.toLong(), viagem = Viagem(
+                                nome = nomeViagem.value.text,
+                                origem = origem.value.text,
+                                destino = destino.value.text,
+                                dataIda = dataInicio.value.text,
+                                dataVolta = dataFinal.value.text,
+                                diasDeViagem = 0,
+                                orcamento = orcamentoTotal.value.text.toDouble(),
+                                orcamentoDiario = 0.0,
+                                orcamentoRestante = 0.0,
+                                gastoTotal = 0.0,
+                                qtdPessoas = quantidadeVianjantes.value.text.toInt(),
+                                descricaoViagem = descricao.value.text
+                            )
+                            )},
+                        title = "Salvar mudanças")
                     Spacer(modifier = Modifier.height(25.dp))
                 }
             }

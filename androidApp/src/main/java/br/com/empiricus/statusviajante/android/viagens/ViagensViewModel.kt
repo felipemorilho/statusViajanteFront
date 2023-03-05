@@ -20,9 +20,6 @@ class ViagensViewModel(
     private val _viagemState = MutableStateFlow<DataResult<Viagem>>(DataResult.Empty)
     val viagemState: StateFlow<DataResult<Viagem>> = _viagemState
 
-    init {
-        getViagens()
-    }
 
     fun getViagens() = viewModelScope.launch {
         viagensRepository.getViagens().collectLatest {
@@ -41,8 +38,8 @@ class ViagensViewModel(
             _viagemState.value = it
         }
     }
-      fun putViagem(viagem: Viagem) = viewModelScope.launch {
-        viagensRepository.putViagem(viagem).collectLatest {
+      fun putViagem(id: Long, viagem: Viagem) = viewModelScope.launch {
+        viagensRepository.putViagem(id, viagem).collectLatest {
             _viagemState.value = it
         }
     }

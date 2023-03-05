@@ -34,6 +34,8 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDet
     val viewModel: ViagensViewModel = viewModel()
     val viagensState by viewModel.viagensState.collectAsState()
 
+    viewModel.getViagens()
+
 
     MyApplicationTheme {
         val scaffoldState = rememberScaffoldState()

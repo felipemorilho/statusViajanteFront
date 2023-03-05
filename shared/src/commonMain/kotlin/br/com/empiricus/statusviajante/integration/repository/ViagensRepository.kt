@@ -34,8 +34,8 @@ class ViagensRepository(
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 
-    suspend fun putViagem(viagem: Viagem) = flow<DataResult<Viagem>> {
-        val chamada = api.putViagem(viagem)
+    suspend fun putViagem(id: Long, viagem: Viagem) = flow<DataResult<Viagem>> {
+        val chamada = api.putViagem(id, viagem)
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 

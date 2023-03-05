@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,10 +22,16 @@ import br.com.empiricus.statusviajante.integration.model.GastoViagem
 import br.com.empiricus.statusviajante.integration.model.Viagem
 import br.com.empiricus.statusviajante.integration.util.DataResult
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
 
 
 @Composable
-fun DescViagens(id: String ,onNavNovoGasto: (Long) -> Unit, onBack: () -> Boolean) {
+fun DescViagens(
+    id: String,
+    onNavNovoGasto: (Long) -> Unit,
+    onBack: () -> Boolean,
+    onEditViagem: (Long) -> Unit
+) {
 
 
     val scope = rememberCoroutineScope()
@@ -48,6 +56,20 @@ fun DescViagens(id: String ,onNavNovoGasto: (Long) -> Unit, onBack: () -> Boolea
                         scope.launch { scaffoldState.drawerState.open() }
                     })
             },
+            floatingActionButton = {
+                MyFloatingActionButtonDelete(
+                    onConfirm = {
+                        viagemViewModel.deleteViagem(id.toLong())
+                        onBack.invoke()
+                    },
+                    onCancel = {},
+                    message = "Você está tentando deletar sua viagem por completo, todos os gatos tambem serão deletados!!! \n" +
+                            "Deseja prosseguir com a exclusão?",
+                    title = "ATENÇÃO"
+                )
+            },
+            floatingActionButtonPosition = FabPosition.Center,
+            isFloatingActionButtonDocked = true,
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 drawerHeader()
@@ -72,14 +94,17 @@ fun DescViagens(id: String ,onNavNovoGasto: (Long) -> Unit, onBack: () -> Boolea
                     ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-
+                Spacer(modifier = Modifier.height(20.dp))
+                IconButton(onClick = {onEditViagem.invoke(id.toLong())}) {
+                    Icon(imageVector = Icons.Filled.Edit, contentDescription = "editar")
+                }
                 when(viagemState) {
                     is DataResult.Loading -> CircularProgressIndicator()
                     is DataResult.Error -> ErrorMessage((viagemState as DataResult.Error).error)
                     is DataResult.Success -> ContentDescriptionViagem((viagemState as DataResult.Success<Viagem>))
                     else -> {}
                 }
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(0.9f),
@@ -93,7 +118,7 @@ fun DescViagens(id: String ,onNavNovoGasto: (Long) -> Unit, onBack: () -> Boolea
                         gastosViewModel.getGastosCategoria(categoriaSelecionada.value.text)
                     }
                 }
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 when(gastosState) {
                     is DataResult.Loading -> CircularProgressIndicator()
@@ -123,6 +148,7 @@ fun ContentDescriptionViagem(
     retorno: DataResult.Success<Viagem>
 ){
     val viagem = retorno.data
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,10 +160,9 @@ fun ContentDescriptionViagem(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.height(5.dp))
             Text(text = viagem.nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
             modifier = Modifier.fillMaxWidth(0.95f),
         ) {
@@ -148,7 +173,7 @@ fun ContentDescriptionViagem(
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start) {
                     Text(text = "Data ida: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-//                    Text(text = viagem.dataIda, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = viagem.dataIda, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -166,13 +191,13 @@ fun ContentDescriptionViagem(
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start) {
                     Text(text = "Orçamento total: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = viagem.orcamento.toString(), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.orcamento), fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start) {
-                    Text(text = "Descrição: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = viagem.descricaoViagem, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = "Orçamento Disponivel: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.orcamentoRestante), fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
             }
 
@@ -184,7 +209,7 @@ fun ContentDescriptionViagem(
                     horizontalArrangement = Arrangement.Start
                 ){
                     Text(text = "Data volta: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-//                    Text(text = viagem.dataVolta, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = viagem.dataVolta, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -205,14 +230,14 @@ fun ContentDescriptionViagem(
                     horizontalArrangement = Arrangement.Start
                 ){
                     Text(text = "Orçamento diário: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = viagem.orcamentoDiario.toString(), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.orcamentoDiario), fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start
                 ){
                     Text(text = "Gastos totais: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = viagem.gastoTotal.toString(), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.gastoTotal), fontWeight = FontWeight.Bold, fontSize = 14.sp)
                 }
             }
         }

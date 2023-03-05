@@ -1,17 +1,15 @@
 package br.com.empiricus.statusviajante.integration.api
 
 import br.com.empiricus.statusviajante.integration.UserLogin
-import br.com.empiricus.statusviajante.integration.model.*
+import br.com.empiricus.statusviajante.integration.model.GastoViagem
+import br.com.empiricus.statusviajante.integration.model.Usuario
+import br.com.empiricus.statusviajante.integration.model.Viagem
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.http.HttpHeaders.AuthenticationInfo
 import io.ktor.http.HttpHeaders.Authorization
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -71,8 +69,8 @@ class Api {
         }.body()
     }
 
-    suspend fun putViagem(viagem: Viagem): Viagem {
-        return httpClient.put("$DEFAULT_URL/viagens") {
+    suspend fun putViagem(id: Long, viagem: Viagem): Viagem {
+        return httpClient.put("$DEFAULT_URL/viagens/${id}") {
             setBody(viagem)
         }.body()
     }

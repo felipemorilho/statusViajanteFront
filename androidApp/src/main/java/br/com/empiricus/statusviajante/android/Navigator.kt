@@ -8,10 +8,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.empiricus.statusviajante.android.cadastroUsuario.cadastroSucesso
 import br.com.empiricus.statusviajante.android.cadastroUsuario.cadastroUsuario
-import br.com.empiricus.statusviajante.android.cadastroviagens.cadastroViagens
+import br.com.empiricus.statusviajante.android.viagens.cadastroViagens
 import br.com.empiricus.statusviajante.android.gastoViagem.GastosViagem
 import br.com.empiricus.statusviajante.android.login.Login
 import br.com.empiricus.statusviajante.android.gastoViagem.DescViagens
+import br.com.empiricus.statusviajante.android.viagens.EditarViagens
 import br.com.empiricus.statusviajante.android.viagens.Viagens
 
 enum class  Route {
@@ -21,6 +22,7 @@ enum class  Route {
     CadastroViagens,
     HomeViagens,
     DetalheViagem,
+    EditarViagem,
     NovoGastoViagem
 }
 
@@ -66,7 +68,14 @@ fun navigator(
                 id = id ?: "0",
                 onNavNovoGasto = { navHostController.navigate("${Route.NovoGastoViagem}/${it}") },
                 onBack = { navHostController.popBackStack() },
-
+                onEditViagem = { navHostController.navigate("${Route.EditarViagem}/${it}") }
+            )
+        }
+        composable("${Route.EditarViagem}/{id}"){
+            val id = it.arguments?.getString("id")
+            EditarViagens(
+                id = id ?: "0",
+                onBack = { navHostController.popBackStack() },
             )
         }
         composable("${Route.NovoGastoViagem}/{id}"){

@@ -13,6 +13,7 @@ data class Viagem(
     val diasDeViagem: Int,
     val orcamento: Double,
     val orcamentoDiario: Double,
+    val orcamentoRestante: Double,
     val gastoTotal: Double,
     val qtdPessoas: Int,
     val descricaoViagem: String
