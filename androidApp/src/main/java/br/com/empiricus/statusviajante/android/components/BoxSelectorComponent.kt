@@ -49,7 +49,7 @@ fun boxSelector(
             onValueChange = { selecionado.value = it },
             modifier = modifier
                 .wrapContentSize(Alignment.TopStart)
-                .fillMaxWidth(0.75f)
+                .fillMaxWidth(0.77f)
                 .height(60.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()
@@ -118,7 +118,7 @@ fun boxSelectorCalendar(
 
         OutlinedTextField(
             modifier = modifier
-                .fillMaxWidth(0.75f)
+                .fillMaxWidth(0.77f)
                 .height(60.dp)
                 .onGloballyPositioned { coordinates ->
                     textFieldSize = coordinates.size.toSize()

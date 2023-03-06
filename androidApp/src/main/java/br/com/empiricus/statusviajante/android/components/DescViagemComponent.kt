@@ -20,7 +20,6 @@ import br.com.empiricus.statusviajante.integration.model.GastoViagem
 @Composable
 fun DescViagemComponent(
     onItemClick: () -> Unit,
-    id: Long,
     dataGasto: String,
     valor: Double,
     moeda: String,
@@ -31,7 +30,7 @@ fun DescViagemComponent(
         Card(
             modifier = Modifier
                 .padding(bottom = 0.2.dp)
-                .clickable { onItemClick }
+                .clickable { onItemClick.invoke() }
 
         ) {
             Row(

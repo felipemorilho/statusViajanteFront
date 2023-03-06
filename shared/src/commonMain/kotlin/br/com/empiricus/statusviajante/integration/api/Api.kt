@@ -84,12 +84,12 @@ class Api {
         return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
     }
 
-    suspend fun getGastosCategoria(categoria: String): List<GastoViagem> {
-        return httpClient.get("$DEFAULT_URL/gastos/categoria/${categoria}").body()
+    suspend fun getGastosCategoria(id: Long,categoria: String): List<GastoViagem> {
+        return httpClient.get("$DEFAULT_URL/gastos/categoria/${id}/${categoria}").body()
     }
 
     suspend fun getGastosById(id: Long): GastoViagem {
-        return httpClient.get("$DEFAULT_URL/gastos/${id}").body()
+        return httpClient.get("$DEFAULT_URL/gastos/gasto/${id}").body()
     }
 
     suspend fun postGastos(id: Long, gastoViagem: GastoViagem): GastoViagem {
@@ -98,8 +98,8 @@ class Api {
         }.body()
     }
 
-    suspend fun putGastos(gastoViagem: GastoViagem): GastoViagem {
-        return httpClient.put("$DEFAULT_URL/gastos"){
+    suspend fun putGastos(id: Long, gastoViagem: GastoViagem): GastoViagem {
+        return httpClient.put("$DEFAULT_URL/gastos/${id}"){
             setBody(gastoViagem)
         }.body()
     }

@@ -19,8 +19,8 @@ class GastosViagemRepository(
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 
-    suspend fun getGastosCategoria(categoria: String) = flow {
-        val chamada = api.getGastosCategoria(categoria)
+    suspend fun getGastosCategoria(id: Long, categoria: String) = flow {
+        val chamada = api.getGastosCategoria(id, categoria)
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 
@@ -34,8 +34,8 @@ class GastosViagemRepository(
         emit(DataResult.Success(chamda))
     }.updateState().flowOn(dispatcher)
 
-    suspend fun putGastos(gastoViagem: GastoViagem) = flow<DataResult<GastoViagem>> {
-        val chamada = api.putGastos(gastoViagem)
+    suspend fun putGastos(id: Long, gastoViagem: GastoViagem) = flow<DataResult<GastoViagem>> {
+        val chamada = api.putGastos(id, gastoViagem)
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 

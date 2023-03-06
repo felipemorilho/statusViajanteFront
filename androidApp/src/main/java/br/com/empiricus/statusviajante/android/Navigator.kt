@@ -1,5 +1,7 @@
 package br.com.empiricus.statusviajante.android
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -11,7 +13,8 @@ import br.com.empiricus.statusviajante.android.cadastroUsuario.cadastroUsuario
 import br.com.empiricus.statusviajante.android.viagens.cadastroViagens
 import br.com.empiricus.statusviajante.android.gastoViagem.GastosViagem
 import br.com.empiricus.statusviajante.android.login.Login
-import br.com.empiricus.statusviajante.android.gastoViagem.DescViagens
+import br.com.empiricus.statusviajante.android.viagens.DescViagens
+import br.com.empiricus.statusviajante.android.gastoViagem.EditarGastosViagem
 import br.com.empiricus.statusviajante.android.viagens.EditarViagens
 import br.com.empiricus.statusviajante.android.viagens.Viagens
 
@@ -23,12 +26,13 @@ enum class  Route {
     HomeViagens,
     DetalheViagem,
     EditarViagem,
-    NovoGastoViagem
+    NovoGastoViagem,
+    EditarGasto
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun navigator(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController(),
     initial: Route = Route.Login
 ) {
@@ -57,9 +61,7 @@ fun navigator(
             Viagens(
                 onNavCadastroViagens = {navHostController.navigate(Route.CadastroViagens.name)},
                 onNavViagem = {navHostController.navigate(Route.DetalheViagem.name)},
-                onItemDetail = {
-                    navHostController.navigate("${Route.DetalheViagem}/${it}")
-                }
+                onItemDetail = { navHostController.navigate("${Route.DetalheViagem}/${it}") }
             )
         }
         composable("${Route.DetalheViagem}/{id}"){
@@ -67,8 +69,9 @@ fun navigator(
             DescViagens(
                 id = id ?: "0",
                 onNavNovoGasto = { navHostController.navigate("${Route.NovoGastoViagem}/${it}") },
-                onBack = { navHostController.popBackStack() },
-                onEditViagem = { navHostController.navigate("${Route.EditarViagem}/${it}") }
+                onEditViagem = { navHostController.navigate("${Route.EditarViagem}/${it}") },
+                onEditGasto = { navHostController.navigate("${Route.EditarGasto}/${it}") },
+                onBack = { navHostController.popBackStack() }
             )
         }
         composable("${Route.EditarViagem}/{id}"){
@@ -86,11 +89,17 @@ fun navigator(
                 onNavDetalheViagem = { navHostController.navigate("${Route.DetalheViagem}/${it}") }
             )
         }
+        composable("${Route.EditarGasto}/{id}"){
+            val id = it.arguments?.getString("id")
+            EditarGastosViagem(
+                id = id ?: "0",
+                onBack = { navHostController.popBackStack() },
+            )
+        }
         composable(Route.CadastroSucesso.name){
             cadastroSucesso(
                 onNavHome = { navHostController.navigate(Route.Login.name) }
             )
         }
-
     }
 }

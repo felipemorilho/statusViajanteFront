@@ -37,8 +37,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
     val email = remember { mutableStateOf(TextFieldValue()) }
     val senha = remember { mutableStateOf(TextFieldValue()) }
     val celular = remember { mutableStateOf(TextFieldValue()) }
-    val onNavHomeOk = remember { mutableStateOf(false)
-    }
+    val onNavHomeOk = remember { mutableStateOf(false) }
 
     val errorNome = remember { mutableStateOf(false) }
     val errorNomeUsuario = remember { mutableStateOf(false) }
@@ -51,6 +50,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
 
 
     MyApplicationTheme {
+        val color = MaterialTheme.colors.secondary
         Scaffold(
             topBar = { topBarComponent() },
             bottomBar = { bottonBarComponent(
@@ -87,7 +87,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Nome deve ser preenchido",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -99,7 +99,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Nome do Usuario deve ser preenchido",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -111,7 +111,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Email deve ser preenchido",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -123,7 +123,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Celular deve conter DDD + 9 Digitos",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -139,7 +139,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                                     "* Senha deve conter no minimo uma letra minuscula [a-z] \n" +
                                     "* Senha deve conter no minimo uma letra maiuscula [A-Z] \n" +
                                     "* Senha deve conter no minimo um caracter espacial",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -151,7 +151,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                             onNavHomeOk.value = true
                         }
                         cadastroState is DataResult.Loading -> CircularProgressIndicator()
-                        cadastroState is DataResult.Error -> ErrorMessage((cadastroState as DataResult.Error).error)
+//                        cadastroState is DataResult.Error -> ErrorMessage((cadastroState as DataResult.Error).error)
                     }
 
                     outLinedButtonComponent(

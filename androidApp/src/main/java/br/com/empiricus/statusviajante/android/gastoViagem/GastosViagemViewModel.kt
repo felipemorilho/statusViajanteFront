@@ -35,8 +35,8 @@ class GastosViagemViewModel(
             _gastoViagemState.value = it
         }
     }
-    fun getGastosCategoria(categoria: String) = viewModelScope.launch {
-        gastosViagemRepository.getGastosCategoria(categoria).collectLatest {
+    fun getGastosCategoria(id: Long,categoria: String) = viewModelScope.launch {
+        gastosViagemRepository.getGastosCategoria(id, categoria).collectLatest {
             _gastosViagemState.value = it
         }
     }
@@ -47,15 +47,14 @@ class GastosViagemViewModel(
         }
     }
 
-    fun putGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
-        gastosViagemRepository.putGastos(gastoViagem).collectLatest {
+    fun putGastos(id: Long, gastoViagem: GastoViagem) = viewModelScope.launch {
+        gastosViagemRepository.putGastos(id, gastoViagem).collectLatest {
             _gastoViagemState.value = it
         }
     }
 
-    fun deleteGastos(gastoViagem: GastoViagem) = viewModelScope.launch {
-        val gastosId = gastoViagem.id
-        gastosViagemRepository.deleteGastos(gastosId).collectLatest {
+    fun deleteGastos(id: Long) = viewModelScope.launch {
+        gastosViagemRepository.deleteGastos(id).collectLatest {
         }
     }
 

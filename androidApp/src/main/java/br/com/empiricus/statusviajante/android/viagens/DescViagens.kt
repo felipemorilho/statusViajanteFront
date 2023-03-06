@@ -1,6 +1,8 @@
-package br.com.empiricus.statusviajante.android.gastoViagem
+package br.com.empiricus.statusviajante.android.viagens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -10,14 +12,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 import br.com.empiricus.statusviajante.android.components.*
-import br.com.empiricus.statusviajante.android.viagens.ViagensViewModel
+import br.com.empiricus.statusviajante.android.gastoViagem.GastosViagemViewModel
 import br.com.empiricus.statusviajante.integration.model.GastoViagem
 import br.com.empiricus.statusviajante.integration.model.Viagem
 import br.com.empiricus.statusviajante.integration.util.DataResult
@@ -30,7 +34,8 @@ fun DescViagens(
     id: String,
     onNavNovoGasto: (Long) -> Unit,
     onBack: () -> Boolean,
-    onEditViagem: (Long) -> Unit
+    onEditViagem: (Long) -> Unit,
+    onEditGasto: (Long) -> Unit
 ) {
 
 
@@ -63,7 +68,7 @@ fun DescViagens(
                         onBack.invoke()
                     },
                     onCancel = {},
-                    message = "Você está tentando deletar sua viagem por completo, todos os gatos tambem serão deletados!!! \n" +
+                    message = "Você está tentando deletar sua viagem por completo, todos os gastos tambem serão deletados!!! \n" +
                             "Deseja prosseguir com a exclusão?",
                     title = "ATENÇÃO"
                 )
@@ -95,17 +100,13 @@ fun DescViagens(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(20.dp))
-                IconButton(onClick = {onEditViagem.invoke(id.toLong())}) {
-                    Icon(imageVector = Icons.Filled.Edit, contentDescription = "editar")
-                }
                 when(viagemState) {
                     is DataResult.Loading -> CircularProgressIndicator()
                     is DataResult.Error -> ErrorMessage((viagemState as DataResult.Error).error)
-                    is DataResult.Success -> ContentDescriptionViagem((viagemState as DataResult.Success<Viagem>))
+                    is DataResult.Success -> ContentDescriptionViagem((viagemState as DataResult.Success<Viagem>), onClickEdit = {onEditViagem.invoke(id.toLong())})
                     else -> {}
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Spacer(modifier = Modifier.height(12.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(0.9f),
                     horizontalArrangement = Arrangement.Center,
@@ -115,15 +116,15 @@ fun DescViagens(
                     if (categoriaSelecionada.value.text == "Todas" || categoriaSelecionada.value.text.isEmpty()){
                         gastosViewModel.getGastosViagem(id.toLong())
                     }else {
-                        gastosViewModel.getGastosCategoria(categoriaSelecionada.value.text)
+                        gastosViewModel.getGastosCategoria(id.toLong(), categoriaSelecionada.value.text)
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 when(gastosState) {
                     is DataResult.Loading -> CircularProgressIndicator()
                     is DataResult.Error -> ErrorMessage((gastosState as DataResult.Error).error)
-                    is DataResult.Success -> ContentDescriptionGastos((gastosState as DataResult.Success<List<GastoViagem>>))
+                    is DataResult.Success -> ContentDescriptionGastos((gastosState as DataResult.Success<List<GastoViagem>>), onClickEdit = onEditGasto)
                     else -> {}
                 }
 
@@ -145,9 +146,19 @@ fun DescViagens(
 
 @Composable
 fun ContentDescriptionViagem(
-    retorno: DataResult.Success<Viagem>
+    retorno: DataResult.Success<Viagem>,
+    onClickEdit: () -> Unit
 ){
     val viagem = retorno.data
+    val color = when{
+        viagem.gastoTotal >= (viagem.orcamento * 50 / 100) && viagem.gastoTotal < (viagem.orcamento * 85 / 100) ->
+            Color.Yellow
+        viagem.gastoTotal >= (viagem.orcamento * 85 / 100) ->
+            Color.Red
+        else -> {
+            MaterialTheme.colors.secondary
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -156,11 +167,30 @@ fun ContentDescriptionViagem(
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth(0.85f),
+            modifier = Modifier.fillMaxWidth(0.9f),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = viagem.nome, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+            Column(
+                modifier = Modifier.fillMaxWidth(0.94f),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = viagem.nome,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = color
+                )
+            }
+            Column(
+                horizontalAlignment = Alignment.End
+            ) {
+                IconButton(onClick = {onClickEdit.invoke()}) {
+                    Icon(imageVector = Icons.Filled.Edit, contentDescription = "editar")
+                }
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row(
@@ -191,13 +221,13 @@ fun ContentDescriptionViagem(
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start) {
                     Text(text = "Orçamento total: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = DecimalFormat("#.##").format(viagem.orcamento), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.orcamento), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = color)
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Start) {
                     Text(text = "Orçamento Disponivel: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = DecimalFormat("#.##").format(viagem.orcamentoRestante), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.orcamentoRestante), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = color)
                 }
             }
 
@@ -237,17 +267,17 @@ fun ContentDescriptionViagem(
                     horizontalArrangement = Arrangement.Start
                 ){
                     Text(text = "Gastos totais: ", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Text(text = DecimalFormat("#.##").format(viagem.gastoTotal), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                    Text(text = DecimalFormat("#.##").format(viagem.gastoTotal), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = color)
                 }
             }
         }
-        Spacer(modifier = Modifier.height(17.dp))
     }
 }
 
 @Composable
 fun ContentDescriptionGastos(
-    retorno: DataResult.Success<List<GastoViagem>>
+    retorno: DataResult.Success<List<GastoViagem>>,
+    onClickEdit: (Long) -> Unit
 ){
     val listaGastos = retorno.data
 
@@ -265,8 +295,7 @@ fun ContentDescriptionGastos(
                 modifier = Modifier.fillMaxWidth(0.85f)
             ) {
                 DescViagemComponent(
-                    onItemClick = {  },
-                    id = listaGastos[it].id,
+                    onItemClick = { onClickEdit.invoke(listaGastos[it].id) },
                     dataGasto = listaGastos[it].dataGasto,
                     valor = listaGastos[it].valorGasto,
                     moeda = listaGastos[it].moeda,

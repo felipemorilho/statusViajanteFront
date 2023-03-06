@@ -3,10 +3,9 @@ package br.com.empiricus.statusviajante.android.viagens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +33,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDet
     val scope = rememberCoroutineScope()
     val viewModel: ViagensViewModel = viewModel()
     val viagensState by viewModel.viagensState.collectAsState()
+    val context = LocalContext.current
 
     viewModel.getViagens()
 
@@ -95,7 +96,7 @@ fun Viagens(onNavCadastroViagens: () -> Unit, onNavViagem: () -> Unit, onItemDet
                     modifier = Modifier.fillMaxSize()
                 ) {
                     outLinedButtonComponent(
-                        onNavigationIconClick = {onNavCadastroViagens.invoke()},
+                        onNavigationIconClick = { onNavCadastroViagens.invoke() },
                         title = "ADICIONAR NOVA VIAGEM"
                     )
                     Spacer(modifier = Modifier.height(25.dp))
@@ -110,8 +111,8 @@ fun ContenteViagens(
     retorno: DataResult.Success<List<Viagem>>,
     onItemDetail: (Long) -> Unit
 ){
-    val viewModel: ViagensViewModel = viewModel()
     val viagens = retorno.data
+
 
     LazyColumn(
         modifier = Modifier
@@ -122,9 +123,18 @@ fun ContenteViagens(
     ) {
 
         items(viagens.size){
+            val color = when{
+                viagens[it].gastoTotal >= (viagens[it].orcamento * 50 / 100) && viagens[it].gastoTotal < (viagens[it].orcamento * 85 / 100) ->
+                    Color.Yellow
+                viagens[it].gastoTotal >= (viagens[it].orcamento * 85 / 100) ->
+                    Color.Red
+                else -> {
+                    Color.Transparent
+                }
+            }
             listaViagemComponent(
+                color = color,
                 onItemClick = { onItemDetail.invoke(viagens[it].id) },
-                id = viagens[it].id,
                 title = viagens[it].nome,
                 dataIda = viagens[it].dataIda,
                 dataVolta = viagens[it].dataVolta

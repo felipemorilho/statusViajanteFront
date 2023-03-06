@@ -1,5 +1,6 @@
 package br.com.empiricus.statusviajante.android.login
 
+import MyAlertDialog
 import br.com.empiricus.statusviajante.android.R
 
 import androidx.compose.foundation.background
@@ -85,23 +86,26 @@ fun Login(onNavCadastro: () -> Unit, onNavHomeViagens: () -> Unit) {
                     outLinedTextFildPassword(valor = senha, title = "SENHA")
                 }
                 item {
-                    if (loginState is DataResult.Loading) {
-                        CircularProgressIndicator()
-                    } else {
-                        if (loginState is DataResult.Success && !navigateToHome.value) {
+                    when {
+                        loginState is DataResult.Loading -> CircularProgressIndicator()
+                        loginState is DataResult.Success && !navigateToHome.value -> {
                             onNavHomeViagens.invoke()
                             navigateToHome.value = true
                         }
+                        loginState is DataResult.Error -> {
+                            MyAlertDialog(
+                                title = "Atenção!!!",
+                                message = "Usuario e/ou Senha invalidos!!"
+                            ) {
 
-                        if (loginState is DataResult.Error) {
-                            showDialog.value = true
+                            }
                         }
-                        outLinedButtonComponent(
-                            title = "ENTRAR",
-                            onNavigationIconClick = {
-                                viewModel.login(usuario.value.text, senha.value.text)
-                            })
                     }
+                    outLinedButtonComponent(
+                        title = "ENTRAR",
+                        onNavigationIconClick = {
+                            viewModel.login(usuario.value.text, senha.value.text)
+                        })
                 }
                 item {
                     outLinedButtonComponent(

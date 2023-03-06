@@ -45,6 +45,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
     val erroDescricao = remember { mutableStateOf(false) }
 
     MyApplicationTheme {
+        val color = MaterialTheme.colors.secondary
         Scaffold(
             topBar = { topBarComponent() },
             bottomBar = { bottonBarComponent(
@@ -93,8 +94,9 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                         Text(
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
-                            text = "* Valor do gasto deve ser preenchido",
-                            color = Color.Red
+                            text = "* Valor do gasto deve ser preenchido \n" +
+                                    "* Valor do gasto não pode ser menor que 0",
+                            color = color
                         )
                     }
                 }
@@ -106,7 +108,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Moeda utilizada deve ser preenchida",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -119,7 +121,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Categoria de gasto deve ser preenchida",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -131,7 +133,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Data do gasto deve ser preenchida",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -143,7 +145,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                             modifier = Modifier.fillMaxWidth(0.8f),
                             textAlign = TextAlign.Left,
                             text = "* Descrição deve ser preenchida",
-                            color = Color.Red
+                            color = color
                         )
                     }
                 }
@@ -151,7 +153,6 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                 item {
                     when(gastosState) {
                         is DataResult.Loading -> CircularProgressIndicator()
-                        is DataResult.Error -> ErrorMessage((gastosState as DataResult.Error).error)
                         is DataResult.Success -> {MyAlertDialog(
                             title = "Uhuuu!!",
                             message = "Gasto cadastrado com sucesso",
@@ -161,13 +162,13 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                     }
                     outLinedButtonComponent(onNavigationIconClick = {
 
-                        when{ valorGasto.value.text.isEmpty() -> erroGasto.value = true else -> erroGasto.value = false }
+                        when{ valorGasto.value.text.isEmpty() || valorGasto.value.text.toDouble() <= 0 -> erroGasto.value = true else -> erroGasto.value = false }
                         when{ moedaSelecionada.value.text.isEmpty() -> erroMoeda.value = true else -> erroMoeda.value = false }
                         when{ categoriaSelecionada.value.text.isEmpty() -> erroCategoria.value = true else -> erroCategoria.value = false }
                         when{ dataGasto.value.text.isEmpty() -> erroData.value = true else -> erroData.value = false }
                         when{ descricaoGasto.value.text.isEmpty() -> erroDescricao.value = true else -> erroDescricao.value = false }
                         when{
-                            valorGasto.value.text.isNotEmpty() && moedaSelecionada.value.text.isNotEmpty() && categoriaSelecionada.value.text.isNotEmpty() && dataGasto.value.text.isNotEmpty() && descricaoGasto.value.text.isNotEmpty() -> {
+                            valorGasto.value.text.isNotEmpty() && !erroGasto.value && moedaSelecionada.value.text.isNotEmpty() && categoriaSelecionada.value.text.isNotEmpty() && dataGasto.value.text.isNotEmpty() && descricaoGasto.value.text.isNotEmpty() -> {
                                 viewModel.postGastos(
                                     id = id.toLong(),
                                     gastoViagem = GastoViagem(
@@ -181,6 +182,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                             }
                         }
                     }, title = "Cadastrar Gasto")
+                    Spacer(modifier = Modifier.height(25.dp))
                 }
             }
         }

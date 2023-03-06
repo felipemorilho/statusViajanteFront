@@ -11,10 +11,10 @@ data class Viagem(
     val dataIda: String,
     val dataVolta: String,
     val diasDeViagem: Int,
-    val orcamento: Double,
-    val orcamentoDiario: Double,
-    val orcamentoRestante: Double,
     val gastoTotal: Double,
+    val orcamento: Double,
+    val orcamentoDiario: Double = 0.0,
+    val orcamentoRestante: Double = 0.0,
     val qtdPessoas: Int,
     val descricaoViagem: String
 )
