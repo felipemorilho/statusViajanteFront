@@ -29,6 +29,11 @@ class ViagensRepository(
         emit(DataResult.Success(chamada))
     }.updateState().flowOn(dispatcher)
 
+    suspend fun getViagemByNome(nome: String) = flow {
+        val chamada = api.getViagensByNome(nome)
+        emit(DataResult.Success(chamada))
+    }.updateState().flowOn(dispatcher)
+
     suspend fun postViagem(viagem: Viagem) = flow<DataResult<Viagem>> {
         val chamada = api.postViagem(viagem)
         emit(DataResult.Success(chamada))

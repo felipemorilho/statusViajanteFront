@@ -20,25 +20,19 @@ fun listaItensDrawer(): List<MenuItens> {
             id = "Home",
             title = "Home",
             contentDescription = "Ir para a pagina inicial da conta",
-            icon = Icons.Filled.Home
-        ),
-        MenuItens(
-            id = "Viagens",
-            title = "Minhas Viagens",
-            contentDescription = "Ir para tela de viagem",
-            icon = Icons.Filled.Insights
+            icon = Icons.Filled.FlightTakeoff
         ),
         MenuItens(
             id = "Criar Viagem",
             title = "Nova Viagem",
             contentDescription = "Ir para tela de ativos",
-            icon = Icons.Filled.Money
+            icon = Icons.Filled.AddCircle
         ),
         MenuItens(
             id = "Meus Dados",
             title = "Meus Dados",
             contentDescription = "Ir para tela de dados da conta",
-            icon = Icons.Filled.EditAttributes
+            icon = Icons.Filled.AccountCircle
         ),
         MenuItens(
             id = "Logout",

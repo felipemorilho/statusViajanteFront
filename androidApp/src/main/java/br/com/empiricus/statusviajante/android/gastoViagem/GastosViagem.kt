@@ -1,7 +1,10 @@
 package br.com.empiricus.statusviajante.android.gastoViagem
 
+import ConfirmAlertDialog
 import MyAlertDialog
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -10,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -24,11 +28,19 @@ import br.com.empiricus.statusviajante.integration.util.DataResult
 import kotlinx.coroutines.launch
 
 @Composable
-fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -> Unit) {
+fun GastosViagem(
+    id: String, onBack: () -> Boolean,
+    onNavHome: () -> Unit,
+    onNavLogin: () -> Unit,
+    onNavCadastroViagens: () -> Unit,
+    onNavDadosUsuario: () -> Unit,
+    ) {
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val viewModel: GastosViagemViewModel = viewModel()
     val gastosState by viewModel.gastoViagemState.collectAsState()
+    val focusManager = LocalFocusManager.current
+
 
     val valorGasto = remember { mutableStateOf(TextFieldValue()) }
     val moedas = listOf("Real", "Dollar", "Euro", "Libra", "Peso")
@@ -38,6 +50,7 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
     val dataGasto = remember { mutableStateOf(TextFieldValue()) }
     val descricaoGasto = remember { mutableStateOf(TextFieldValue()) }
 
+    val navLogin = remember { mutableStateOf(false) }
     val erroGasto = remember { mutableStateOf(false) }
     val erroMoeda = remember { mutableStateOf(false) }
     val erroCategoria = remember { mutableStateOf(false) }
@@ -60,12 +73,34 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                     itens = listaItensDrawer(),
                     onItemClick = {
                         when(it.id) {
-
+                            "Home" -> {
+                                onBack.invoke()
+                                onNavHome.invoke()
+                            }
+                            "Criar Viagem" -> {
+                                onBack.invoke()
+                                onNavCadastroViagens.invoke()
+                            }
+                            "Meus Dados" -> {
+                                onBack.invoke()
+                                onNavDadosUsuario.invoke()
+                            }
+                            "Logout" -> {
+                                navLogin.value = true
+                            }
                         }
                     }
                 )
             }
         ) {
+            if (navLogin.value){
+            ConfirmAlertDialog(
+                title = "Atenção",
+                message = "Você deseja sair da sua conta?",
+                onConfirm = { onNavLogin.invoke() },
+                onCancel = {onBack.invoke()}
+            )
+        }
             LazyColumn(
                 modifier = Modifier
                     .background(
@@ -77,7 +112,12 @@ fun GastosViagem(id: String, onBack: () -> Boolean, onNavDetalheViagem: (Long) -
                         )
                     )
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(it)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        focusManager.clearFocus()
+                    },
                 verticalArrangement = Arrangement.spacedBy(25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){

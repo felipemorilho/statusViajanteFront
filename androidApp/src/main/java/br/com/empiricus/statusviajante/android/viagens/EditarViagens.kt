@@ -1,9 +1,12 @@
 package br.com.empiricus.statusviajante.android.viagens
 
+import ConfirmAlertDialog
 import MyAlertDialog
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
@@ -13,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -27,13 +31,23 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @Composable
-fun EditarViagens(id: String, onBack: () -> Boolean) {
+fun EditarViagens(
+    id: String,
+    onBack: () -> Boolean,
+    onNavHome: () -> Unit,
+    onNavLogin: () -> Unit,
+    onNavCadastroViagens: () -> Unit,
+    onNavDadosUsuario: () -> Unit,
+) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val viewModel: ViagensViewModel = viewModel()
     val viagemState by viewModel.viagemState.collectAsState()
     val attViagem = remember { mutableStateOf(false) }
+    val navLogin = remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+
 
     viewModel.getViagensById(id.toLong())
 
@@ -46,7 +60,8 @@ fun EditarViagens(id: String, onBack: () -> Boolean) {
                     onBack = { onBack.invoke() },
                     onNavDrawer = {
                         scope.launch { scaffoldState.drawerState.open() }
-                    })
+                    }
+                )
             },
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
@@ -54,14 +69,35 @@ fun EditarViagens(id: String, onBack: () -> Boolean) {
                 drawerBody(
                     itens = listaItensDrawer(),
                     onItemClick = {
-                        when (it.id) {
-
+                        when(it.id) {
+                            "Home" -> {
+                                onBack.invoke()
+                                onNavHome.invoke()
+                            }
+                            "Criar Viagem" -> {
+                                onBack.invoke()
+                                onNavCadastroViagens.invoke()
+                            }
+                            "Meus Dados" -> {
+                                onBack.invoke()
+                                onNavDadosUsuario.invoke()
+                            }
+                            "Logout" -> {
+                                navLogin.value = true
+                            }
                         }
                     }
                 )
             }
-
         ) {
+            if (navLogin.value){
+                ConfirmAlertDialog(
+                    title = "Atenção",
+                    message = "Você deseja sair da sua conta?",
+                    onConfirm = { onNavLogin.invoke() },
+                    onCancel = {onBack.invoke()}
+                )
+            }
             Column(
                 modifier = Modifier
                     .background(
@@ -74,6 +110,11 @@ fun EditarViagens(id: String, onBack: () -> Boolean) {
                     )
                     .fillMaxSize()
                     .padding(it)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        focusManager.clearFocus()
+                    }
             ) {
                 when (viagemState) {
                     is DataResult.Loading -> { LoadingIndicator() }

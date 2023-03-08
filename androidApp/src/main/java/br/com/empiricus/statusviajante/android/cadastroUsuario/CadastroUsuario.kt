@@ -1,7 +1,10 @@
 package br.com.empiricus.statusviajante.android.cadastroUsuario
 
-import android.text.TextUtils.isEmpty
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
@@ -11,13 +14,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.empiricus.statusviajante.integration.util.DataResult
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
@@ -31,6 +38,7 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
 
     val viewModel: CadastroUsuariosViewModel = viewModel()
     val cadastroState by viewModel.cadastro.collectAsState()
+    val focusManager = LocalFocusManager.current
 
     val nome = remember { mutableStateOf(TextFieldValue()) }
     val nomeUsuario = remember { mutableStateOf(TextFieldValue()) }
@@ -70,7 +78,13 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                         )
                     )
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(it)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        focusManager.clearFocus()
+                    },
+
                 verticalArrangement = Arrangement.spacedBy(25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -129,7 +143,8 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
                 }
 
                 item {
-                    outLinedTextFildPassword(valor = senha, title = "SENHA")
+                    outLinedTextFildPassword(
+                        valor = senha, title = "SENHA")
                     if (errorSenha.value){
                         Text(
                             modifier = Modifier.fillMaxWidth(0.8f),
@@ -183,11 +198,4 @@ fun cadastroUsuario(onBack: () -> Boolean, onNavCadastroSucesso: () -> Unit) {
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun loginPreview() {
-    cadastroUsuario(onBack = { true }, {})
 }

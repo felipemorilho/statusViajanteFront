@@ -33,6 +33,12 @@ class ViagensViewModel(
         }
     }
 
+    fun getViagensByNome(nome: String) = viewModelScope.launch {
+        viagensRepository.getViagemByNome(nome).collectLatest {
+            _viagensState.value = it
+        }
+    }
+
     fun postViagem(viagem: Viagem) = viewModelScope.launch {
         viagensRepository.postViagem(viagem).collectLatest {
             _viagemState.value = it

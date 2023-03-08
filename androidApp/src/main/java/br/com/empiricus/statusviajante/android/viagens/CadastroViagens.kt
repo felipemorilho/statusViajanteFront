@@ -1,23 +1,24 @@
 package br.com.empiricus.statusviajante.android.viagens
 
+import ConfirmAlertDialog
 import MyAlertDialog
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
@@ -30,12 +31,19 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun cadastroViagens(onBack: () -> Boolean) {
+fun cadastroViagens(
+    onBack: () -> Boolean,
+    onNavHome: () -> Unit,
+    onNavLogin: () -> Unit,
+    onNavDadosUsuario: () -> Unit,
+) {
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val viewModel: ViagensViewModel = viewModel()
     val viagemState by viewModel.viagemState.collectAsState()
+    val focusManager = LocalFocusManager.current
+
 
     val nomeViagem = remember { mutableStateOf(TextFieldValue()) }
     val origem = remember { mutableStateOf(TextFieldValue()) }
@@ -47,7 +55,7 @@ fun cadastroViagens(onBack: () -> Boolean) {
     val descricao = remember { mutableStateOf(TextFieldValue()) }
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-
+    val navLogin = remember { mutableStateOf(false) }
     val errorNome = remember { mutableStateOf(false) }
     val errorOrigem = remember { mutableStateOf(false) }
     val errorDestino = remember { mutableStateOf(false) }
@@ -67,7 +75,8 @@ fun cadastroViagens(onBack: () -> Boolean) {
                 onBack = {onBack.invoke()},
                 onNavDrawer = {
                     scope.launch { scaffoldState.drawerState.open() }
-                }) },
+                }
+            )},
             drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
             drawerContent = {
                 drawerHeader()
@@ -75,13 +84,32 @@ fun cadastroViagens(onBack: () -> Boolean) {
                     itens = listaItensDrawer(),
                     onItemClick = {
                         when(it.id) {
-
+                            "Home" -> {
+                                onBack.invoke()
+                                onNavHome.invoke()
+                            }
+                            "Criar Viagem" -> {
+                            }
+                            "Meus Dados" -> {
+                                onBack.invoke()
+                                onNavDadosUsuario.invoke()
+                            }
+                            "Logout" -> {
+                                navLogin.value = true
+                            }
                         }
                     }
                 )
             }
-
         ){
+            if (navLogin.value){
+                ConfirmAlertDialog(
+                    title = "Atenção",
+                    message = "Você deseja sair da sua conta?",
+                    onConfirm = { onNavLogin.invoke() },
+                    onCancel = {onBack.invoke()}
+                )
+            }
             LazyColumn(
                 modifier = Modifier
                     .background(
@@ -93,7 +121,12 @@ fun cadastroViagens(onBack: () -> Boolean) {
                         )
                     )
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(it)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        focusManager.clearFocus()
+                    },
                 verticalArrangement = Arrangement.spacedBy(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){

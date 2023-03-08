@@ -7,13 +7,9 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -26,7 +22,7 @@ fun outLinedTextFildComponent(
     valor : MutableState<TextFieldValue>,
     title: String,
     modifier: Modifier = Modifier,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
 ){
     OutlinedTextField(
         modifier = modifier
@@ -97,6 +93,79 @@ fun outLinedTextFildPassword (
             unfocusedBorderColor = MaterialTheme.colors.secondary,
             focusedLabelColor = MaterialTheme.colors.secondary,
             cursorColor = MaterialTheme.colors.secondary,
+        )
+    )
+}
+
+@Composable
+fun OutLinedTextFildSearch (
+    valor : MutableState<TextFieldValue>,
+    title : String,
+    modifier: Modifier = Modifier,
+    trailingIcon: () -> Unit
+) {
+
+    val passwordVisible = remember {
+        mutableStateOf(false)
+    }
+
+    OutlinedTextField(
+        modifier = modifier
+            .fillMaxWidth(0.78f)
+            .height(60.dp),
+        value = valor.value,
+        onValueChange = { valor.value = it },
+        label = {
+            Text(
+                text = title,
+                color = MaterialTheme.colors.secondary,
+                style = TextStyle(shadow = Shadow(color = MaterialTheme.colors.secondary))
+            )
+        },
+        visualTransformation = if (passwordVisible.value.not()) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        trailingIcon = {
+        },
+        shape = MaterialTheme.shapes.medium,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colors.secondary,
+            unfocusedBorderColor = MaterialTheme.colors.secondary,
+            focusedLabelColor = MaterialTheme.colors.secondary,
+            cursorColor = MaterialTheme.colors.secondary,
+        )
+    )
+}
+
+@Composable
+fun outLinedTextFildReadOnly(
+    valor : MutableState<TextFieldValue>,
+    title: String,
+    modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text,
+){
+    OutlinedTextField(
+        readOnly = true,
+        modifier = modifier
+            .fillMaxWidth(0.78f)
+            .height(60.dp),
+        value = valor.value,
+        onValueChange = { valor.value = it },
+        label = {
+            Text(
+                text = title,
+                color = MaterialTheme.colors.secondary,
+                style = TextStyle(
+                    shadow = Shadow(color = MaterialTheme.colors.secondary)
+                )
+            )
+        },
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        shape = MaterialTheme.shapes.medium,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colors.secondary,
+            unfocusedBorderColor = MaterialTheme.colors.secondary,
+            focusedLabelColor = MaterialTheme.colors.secondary,
+            cursorColor = MaterialTheme.colors.secondary
         )
     )
 }

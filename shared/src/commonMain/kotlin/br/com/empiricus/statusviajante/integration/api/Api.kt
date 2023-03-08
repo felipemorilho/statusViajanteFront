@@ -2,6 +2,7 @@ package br.com.empiricus.statusviajante.integration.api
 
 import br.com.empiricus.statusviajante.integration.UserLogin
 import br.com.empiricus.statusviajante.integration.model.GastoViagem
+import br.com.empiricus.statusviajante.integration.model.StringModel
 import br.com.empiricus.statusviajante.integration.model.Usuario
 import br.com.empiricus.statusviajante.integration.model.Viagem
 import io.ktor.client.*
@@ -12,6 +13,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.HttpHeaders.Authorization
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
 
@@ -54,6 +56,29 @@ class Api {
         }.body()
     }
 
+    //============================ Usuario ==================================
+
+    suspend fun getUsuarioByUsername(): Usuario {
+        return httpClient.get("$DEFAULT_URL/usuario").body()
+    }
+
+    suspend fun putUsuario(usuario: Usuario): Usuario {
+        return httpClient.put("$DEFAULT_URL/usuario") {
+            setBody(usuario)
+        }.body()
+    }
+
+    suspend fun putSenhaUsuario(senhaAtual:String, novaSenha: String): Usuario {
+        return httpClient.put("$DEFAULT_URL/usuario") {
+            setBody(senhaAtual)
+            setBody(novaSenha)
+        }.body()
+    }
+
+    suspend fun deleteUsuario(id: Long) {
+        return httpClient.delete("$DEFAULT_URL/usuario/${id}").body()
+    }
+
     //============================ Viagens ==================================
     suspend fun getAllViagens(): List<Viagem> {
         return httpClient.get("$DEFAULT_URL/viagens").body()
@@ -61,6 +86,9 @@ class Api {
 
     suspend fun getViagemById(id: Long): Viagem {
         return httpClient.get("$DEFAULT_URL/viagens/${id}").body()
+    }
+    suspend fun getViagensByNome(nome: String): List<Viagem> {
+        return httpClient.get("$DEFAULT_URL/viagens/nome/${nome}").body()
     }
 
     suspend fun postViagem(viagem: Viagem): Viagem {

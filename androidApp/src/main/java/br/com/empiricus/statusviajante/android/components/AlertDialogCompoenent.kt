@@ -28,3 +28,30 @@ fun MyAlertDialog(
         )
     }
 }
+
+@Composable
+fun ConfirmAlertDialog(
+    title: String,
+    message: String,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = { onCancel.invoke() },
+        title = { Text(text = title) },
+        text = { Text(text = message) },
+        buttons = {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                TextButton(onClick = {onCancel.invoke()}) {
+                    Text(text = "Cancelar")
+                }
+                TextButton(onClick = onConfirm) {
+                    Text(text = "Confirmar")
+                }
+            }
+        }
+    )
+}

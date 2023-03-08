@@ -1,8 +1,12 @@
 package br.com.empiricus.statusviajante.android.viagens
 
+import ConfirmAlertDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -13,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -34,19 +39,23 @@ fun DescViagens(
     id: String,
     onNavNovoGasto: (Long) -> Unit,
     onBack: () -> Boolean,
+    onNavHome: () -> Unit,
+    onNavLogin: () -> Unit,
+    onNavCadastroViagens: () -> Unit,
+    onNavDadosUsuario: () -> Unit,
     onEditViagem: (Long) -> Unit,
     onEditGasto: (Long) -> Unit
 ) {
-
-
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
     val gastosViewModel: GastosViagemViewModel = viewModel()
     val gastosState by gastosViewModel.gastosViagemState.collectAsState()
     val viagemViewModel: ViagensViewModel = viewModel()
     val viagemState by viagemViewModel.viagemState.collectAsState()
+    val focusManager = LocalFocusManager.current
     val categorias = listOf("Todas","Lazer", "Hospedagem", "Transporte", "Alimentação", "Outros")
     val categoriaSelecionada = remember { mutableStateOf(TextFieldValue()) }
+    val navLogin = remember { mutableStateOf(false) }
 
     viagemViewModel.getViagensById(id.toLong())
 
@@ -60,6 +69,32 @@ fun DescViagens(
                     onNavDrawer = {
                         scope.launch { scaffoldState.drawerState.open() }
                     })
+            },
+            drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+            drawerContent = {
+                drawerHeader()
+                drawerBody(
+                    itens = listaItensDrawer(),
+                    onItemClick = {
+                        when(it.id) {
+                            "Home" -> {
+                                onBack.invoke()
+                                onNavHome.invoke()
+                            }
+                            "Criar Viagem" -> {
+                                onBack.invoke()
+                                onNavCadastroViagens.invoke()
+                            }
+                            "Meus Dados" -> {
+                                onBack.invoke()
+                                onNavDadosUsuario.invoke()
+                            }
+                            "Logout" -> {
+                                navLogin.value = true
+                            }
+                        }
+                    }
+                )
             },
             floatingActionButton = {
                 MyFloatingActionButtonDelete(
@@ -75,16 +110,15 @@ fun DescViagens(
             },
             floatingActionButtonPosition = FabPosition.Center,
             isFloatingActionButtonDocked = true,
-            drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-            drawerContent = {
-                drawerHeader()
-                drawerBody(
-                    itens = listaItensDrawer(),
-                    onItemClick = {}
+        ) {
+            if (navLogin.value){
+                ConfirmAlertDialog(
+                    title = "Atenção",
+                    message = "Você deseja sair da sua conta?",
+                    onConfirm = { onNavLogin.invoke() },
+                    onCancel = {onBack.invoke()}
                 )
             }
-
-        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -96,7 +130,12 @@ fun DescViagens(
                                 MaterialTheme.colors.primaryVariant
                             )
                         )
-                    ),
+                    )
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        focusManager.clearFocus()
+                    },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(20.dp))

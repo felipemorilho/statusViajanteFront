@@ -16,12 +16,15 @@ import androidx.compose.ui.unit.dp
 import br.com.empiricus.statusviajante.android.MyApplicationTheme
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,7 +38,8 @@ fun Login(onNavCadastro: () -> Unit, onNavHomeViagens: () -> Unit) {
     val viewModel: LoginViewModel = viewModel()
     val loginState by viewModel.loginState.collectAsState()
     val navigateToHome = remember { mutableStateOf(false) }
-    val showDialog = remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+
 
     val usuario = remember { mutableStateOf(TextFieldValue()) }
     val senha = remember { mutableStateOf(TextFieldValue()) }
@@ -61,7 +65,12 @@ fun Login(onNavCadastro: () -> Unit, onNavHomeViagens: () -> Unit) {
                         )
                     )
                     .fillMaxSize()
-                    .padding(it),
+                    .padding(it)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        focusManager.clearFocus()
+                    },
                 verticalArrangement = Arrangement.spacedBy(25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
